@@ -2,6 +2,6 @@ assemble:
     -   from: batch
         into: batch
 accessibility-scanner-objects:
-    description: Liferay Objects that store accessibility scans, scanned pages and findings, scoped by site.
+    description: Liferay Objects that store accessibility scans, scanned pages, findings and per-site settings, scoped by site.
     name: Accessibility Scanner - Objects
     type: batch

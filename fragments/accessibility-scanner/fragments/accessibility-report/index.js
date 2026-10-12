@@ -117,6 +117,8 @@
 				Accept: 'application/json',
 				// Avoid 406 when the visitor's browser language is not a portal locale.
 				'Accept-Language': (window.Liferay?.ThemeDisplay?.getLanguageId?.() || 'en_US').replace('_', '-'),
+				// Quarterly releases require the CSRF token on session GETs too.
+				...(window.Liferay?.authToken ? {'x-csrf-token': window.Liferay.authToken} : {}),
 			},
 		});
 		if (!response.ok) {

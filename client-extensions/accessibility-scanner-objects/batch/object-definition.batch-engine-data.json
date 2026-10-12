@@ -846,6 +846,165 @@
 			},
 			"system": false,
 			"titleObjectFieldName": "siteName"
+		},
+		{
+			"accountEntryRestricted": false,
+			"active": true,
+			"enableCategorization": false,
+			"enableComments": false,
+			"enableLocalization": false,
+			"enableObjectEntryHistory": true,
+			"externalReferenceCode": "ACCESSIBILITY_SETTING",
+			"label": {
+				"en_US": "Accessibility Setting",
+				"es_ES": "Ajuste de accesibilidad"
+			},
+			"name": "AccessibilitySetting",
+			"objectActions": [],
+			"objectFields": [
+				{
+					"DBType": "Boolean",
+					"businessType": "Boolean",
+					"externalReferenceCode": "ACCESSIBILITY_SETTING_HIDEPAGEEDITORPANEL",
+					"indexed": false,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Hide the panel in the page editor",
+						"es_ES": "Ocultar el panel en el editor de páginas"
+					},
+					"name": "hidePageEditorPanel",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Boolean"
+				},
+				{
+					"DBType": "Boolean",
+					"businessType": "Boolean",
+					"externalReferenceCode": "ACCESSIBILITY_SETTING_DISABLEPUBLISHEDSCAN",
+					"indexed": false,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Disable the published page scan",
+						"es_ES": "Desactivar el análisis de la página publicada"
+					},
+					"name": "disablePublishedScan",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Boolean"
+				},
+				{
+					"DBType": "Boolean",
+					"businessType": "Boolean",
+					"externalReferenceCode": "ACCESSIBILITY_SETTING_DISABLESITESCAN",
+					"indexed": false,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Disable site scans",
+						"es_ES": "Desactivar los análisis del sitio"
+					},
+					"name": "disableSiteScan",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Boolean"
+				},
+				{
+					"DBType": "Boolean",
+					"businessType": "Boolean",
+					"externalReferenceCode": "ACCESSIBILITY_SETTING_DISABLECMSEDITOR",
+					"indexed": false,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Disable checks in the CMS content editor",
+						"es_ES": "Desactivar las comprobaciones en el editor de contenidos del CMS"
+					},
+					"name": "disableCMSEditor",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Boolean"
+				},
+				{
+					"DBType": "Boolean",
+					"businessType": "Boolean",
+					"externalReferenceCode": "ACCESSIBILITY_SETTING_DISABLEWEBCONTENTEDITOR",
+					"indexed": false,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Disable checks in the web content editor",
+						"es_ES": "Desactivar las comprobaciones en el editor de contenido web"
+					},
+					"name": "disableWebContentEditor",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Boolean"
+				},
+				{
+					"DBType": "Boolean",
+					"businessType": "Boolean",
+					"externalReferenceCode": "ACCESSIBILITY_SETTING_DISABLEBLOGSEDITOR",
+					"indexed": false,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Disable checks in the blogs editor",
+						"es_ES": "Desactivar las comprobaciones en el editor de blogs"
+					},
+					"name": "disableBlogsEditor",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Boolean"
+				},
+				{
+					"DBType": "Boolean",
+					"businessType": "Boolean",
+					"externalReferenceCode": "ACCESSIBILITY_SETTING_BLOCKPUBLISHONCRITICAL",
+					"indexed": false,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Block publishing CMS content with critical issues",
+						"es_ES": "Bloquear la publicación de contenidos del CMS con problemas críticos"
+					},
+					"name": "blockPublishOnCritical",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Boolean"
+				}
+			],
+			"objectLayouts": [],
+			"objectRelationships": [],
+			"objectViews": [],
+			"panelCategoryKey": "site_administration.configuration",
+			"parameterRequired": false,
+			"pluralLabel": {
+				"en_US": "Accessibility Settings",
+				"es_ES": "Ajustes de accesibilidad"
+			},
+			"portlet": true,
+			"scope": "site",
+			"status": {
+				"code": 0
+			},
+			"system": false,
+			"titleObjectFieldName": "id"
 		}
 	]
 }

@@ -9,26 +9,15 @@
  * Scan Objects with the current user's session.
  */
 
-import {checkDocuments, checkPageDefinition, checkPageTitles, checkTokenContrast, resolvePageInfo} from './model.js';
+import {apiHeaders} from './settings.js';
+import {checkDocuments, checkPageDefinition, checkPageTitles, checkTokenContrast, listPagesViaJSONWS, resolvePageInfo} from './model.js';
 
 const FRAME_NAME = 'lfr-accessibility-published-scan';
 const IMPACT_WEIGHT = {critical: 10, minor: 1, moderate: 2, serious: 5};
 const CONCURRENT_WRITES = 6;
 
-/* Liferay's REST layer answers 406 when the browser's Accept-Language has no
-   matching portal locale (an en-GB browser on an en-US portal), so every
-   request names the portal language explicitly. */
-function portalLanguage() {
-	return (window.Liferay?.ThemeDisplay?.getLanguageId?.() || 'en_US').replace('_', '-');
-}
-
 function authHeaders(json = true) {
-	return {
-		Accept: 'application/json',
-		'Accept-Language': portalLanguage(),
-		...(json ? {'Content-Type': 'application/json'} : {}),
-		...(window.Liferay?.authToken ? {'x-csrf-token': window.Liferay.authToken} : {}),
-	};
+	return apiHeaders(json ? {'Content-Type': 'application/json'} : {});
 }
 
 async function api(path, {body, method = 'GET'} = {}) {
@@ -197,12 +186,14 @@ async function listSitePages(siteERC, privateLayout) {
 	return pages;
 }
 
-/** Public and private pages; private ones live under /group/<site> and need the session. */
-async function listAllPages(siteERC) {
-	const [publicPages, privatePages] = await Promise.all([
-		listSitePages(siteERC, false),
-		listSitePages(siteERC, true).catch(() => []),
-	]);
+/**
+ * Public and private pages; private ones live under /group/<site> and need the
+ * session. Falls back to JSON-WS when headless-admin-site is not available.
+ */
+async function listAllPages(siteERC, groupId, languageId) {
+	const list = (privateLayout) =>
+		listSitePages(siteERC, privateLayout).catch(() => listPagesViaJSONWS(groupId, privateLayout, languageId));
+	const [publicPages, privatePages] = await Promise.all([list(false), list(true).catch(() => [])]);
 	return [...publicPages, ...privatePages];
 }
 
@@ -363,7 +354,7 @@ export async function runSiteScan({onProgress = () => {}, schemes = ['light'], s
 	const site = await api(`/o/headless-admin-user/v1.0/sites/${info.groupId}`).catch(() => null);
 	const languages = site?.availableLanguages || [];
 	const defaultLanguage = (window.Liferay?.ThemeDisplay?.getDefaultLanguageId?.() || languages[0] || 'en-US').replace('_', '-');
-	const pages = await listAllPages(info.siteERC);
+	const pages = await listAllPages(info.siteERC, info.groupId, defaultLanguage);
 	const styleBooks = await api(`/o/headless-admin-site/v1.0/sites/${encodeURIComponent(info.siteERC)}/style-books?pageSize=100`)
 		.then((r) => r.items || [])
 		.catch(() => []);

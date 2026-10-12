@@ -1,5 +1,7 @@
+import {detectContentEditor} from './content-editors.js';
 import {ScannerPanel} from './panel.js';
 import {runScan} from './runner.js';
+import {canCreateScans, loadSettings} from './settings.js';
 
 /**
  * Boot. Waits for the content page editor to mount and attaches the panel to
@@ -42,6 +44,10 @@ function waitFor(selector, timeout) {
 
 function wantsPanel() {
 	const params = new URLSearchParams(window.location.search);
+	// Content authoring screens: CMS content editor, Web Content and Blogs.
+	if (!document.querySelector(EDITOR_SELECTOR) && detectContentEditor()) {
+		return 'content';
+	}
 	if (params.get('p_l_mode') === 'edit' || document.querySelector(EDITOR_SELECTOR)) {
 		return 'editor';
 	}
@@ -51,16 +57,42 @@ function wantsPanel() {
 	return null;
 }
 
+/** What the site allows: per-site settings plus the permission to store scans. */
+async function siteOptions(groupId) {
+	const settings = await loadSettings(groupId);
+	const allowSite = !settings.disableSiteScan && (await canCreateScans(groupId));
+	return {allowPublished: !settings.disablePublishedScan, allowSite, settings};
+}
+
 async function mountFor(mode) {
+	const groupId = window.Liferay?.ThemeDisplay?.getScopeGroupId?.();
 	if (mode === 'editor') {
 		const editor = await waitFor(EDITOR_SELECTOR, MAX_WAIT_MS);
-		if (editor && wantsPanel() === 'editor') {
-			window.__lfrAccessibilityScannerPanel = new ScannerPanel(editor, {mode: 'editor'});
+		if (!editor || wantsPanel() !== 'editor') {
+			return;
 		}
+		const options = await siteOptions(groupId);
+		if (options.settings.hidePageEditorPanel || wantsPanel() !== 'editor') {
+			return;
+		}
+		window.__lfrAccessibilityScannerPanel = new ScannerPanel(editor, {...options, mode: 'editor'});
+		return;
+	}
+	if (mode === 'content') {
+		const adapter = detectContentEditor();
+		if (!adapter) {
+			return;
+		}
+		const settings = await loadSettings(adapter.groupId());
+		if (settings[adapter.settingKey] || wantsPanel() !== 'content') {
+			return;
+		}
+		window.__lfrAccessibilityScannerPanel = new ScannerPanel(adapter.root, {adapter, allowPublished: false, allowSite: false, mode: 'content', settings});
 		return;
 	}
 	if (mode === 'view') {
-		window.__lfrAccessibilityScannerPanel = new ScannerPanel(viewRoot(), {mode: 'view'});
+		const options = await siteOptions(groupId);
+		window.__lfrAccessibilityScannerPanel = new ScannerPanel(viewRoot(), {...options, mode: 'view'});
 	}
 }
 

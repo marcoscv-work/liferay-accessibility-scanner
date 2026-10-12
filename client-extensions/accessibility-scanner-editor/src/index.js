@@ -1,7 +1,7 @@
 /**
  * Loader. This is the only script every page pays for: it decides whether the
- * scanner is needed (page editor, or `?accessibilityScan=1` on a rendered page) and
- * only then injects the full bundle with axe-core.
+ * scanner is needed (page editor, content editors, or `?accessibilityScan=1` on
+ * a rendered page) and only then injects the full bundle with axe-core.
  */
 
 const SCANNER_FILE = __SCANNER_FILE__;
@@ -41,7 +41,8 @@ const SCANNER_FILE = __SCANNER_FILE__;
 			load();
 			return true;
 		}
-		if (document.querySelector('.page-editor')) {
+		// Page editor, CMS content editor, Web Content and Blogs editors.
+		if (document.querySelector('.page-editor, form.cms-object-layout-form, .content-editor__toolbar, form.edit-article-form, form.edit-entry')) {
 			load();
 			return true;
 		}

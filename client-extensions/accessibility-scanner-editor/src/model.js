@@ -1,3 +1,4 @@
+import {apiHeaders} from './settings.js';
 /**
  * Model-level checks. These read the page definition, the site and the style
  * book through Liferay's APIs instead of the rendered DOM, so they catch what
@@ -72,14 +73,29 @@ function authParam() {
 	return window.Liferay?.authToken ? `?p_auth=${window.Liferay.authToken}` : '';
 }
 
+/**
+ * Site pages through JSON-WS, available on every 7.4 and quarterly release.
+ * Used when headless-admin-site site-pages is not available (it sits behind
+ * the beta flag LPD-35443 up to 2026.Q3). Returns the same shape the scanner
+ * reads from the headless API.
+ */
+export async function listPagesViaJSONWS(groupId, privateLayout, languageId) {
+	const layouts = await getJSON(`/api/jsonws/layout/get-layouts/group-id/${groupId}/private-layout/${privateLayout}${authParam()}`);
+	const lang = (languageId || 'en-US').replace('_', '-');
+	return (Array.isArray(layouts) ? layouts : [])
+		.filter((layout) => !layout.system && ['content', 'portlet'].includes(layout.type))
+		.map((layout) => ({
+			externalReferenceCode: layout.externalReferenceCode,
+			friendlyUrlPath_i18n: {[lang]: layout.friendlyURL},
+			name_i18n: {[lang]: layout.nameCurrentValue || layout.friendlyURL},
+			privateLayout: Boolean(privateLayout),
+		}));
+}
+
 async function getJSON(url) {
 	const response = await fetch(url, {
 		credentials: 'include',
-		headers: {
-			Accept: 'application/json',
-			// Avoid 406 when the browser language is not a portal locale.
-			'Accept-Language': (window.Liferay?.ThemeDisplay?.getLanguageId?.() || 'en_US').replace('_', '-'),
-		},
+		headers: apiHeaders(),
 	});
 	if (!response.ok) {
 		throw new Error(`${response.status} ${url.split('?')[0]}`);
@@ -450,7 +466,10 @@ export async function runModelScan({mode, pageLevelOnly = false}) {
 		if (!pageLevelOnly) try {
 			const pages = await getJSON(
 				`/o/headless-admin-site/v1.0/sites/${encodeURIComponent(info.siteERC)}/site-pages?pageSize=200&fields=externalReferenceCode,friendlyUrlPath_i18n,name_i18n`
-			);
+			).catch(async () => {
+				const items = await listPagesViaJSONWS(info.groupId, false, defaultLanguage);
+				return {items, totalCount: items.length};
+			});
 			findings = findings.concat(checkPageTitles(pages.items || [], defaultLanguage));
 			if (pages.totalCount > 200) {
 				notes.push(`Page titles checked on the first 200 of ${pages.totalCount} pages`);

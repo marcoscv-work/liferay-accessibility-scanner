@@ -2,7 +2,7 @@ import {t} from './i18n.js';
 import {contextLabel, groupKey} from './liferay-context.js';
 import {MODEL_CHECK_COUNT, runModelScan} from './model.js';
 import {latestScan, probeSiteDarkScheme, runSiteScan} from './site-scan.js';
-import {ENGINE_VERSION, LIFERAY_RULE_COUNT, runScan} from './runner.js';
+import {ENGINE_VERSION, LIFERAY_RULE_COUNT, runContentScan, runScan} from './runner.js';
 import {PANEL_CSS} from './styles.js';
 
 const IMPACTS = ['critical', 'serious', 'moderate', 'minor'];
@@ -147,11 +147,15 @@ async function resolvePublishedURL() {
 }
 
 export class ScannerPanel {
-	constructor(root, {mode}) {
+	constructor(root, {adapter = null, allowPublished = true, allowSite = true, mode, settings = {}}) {
 		this.root = root;
 		this.mode = mode;
-		this.source = mode === 'editor' ? 'editor' : 'published';
-		this.reports = {editor: null, published: null, site: null};
+		this.adapter = adapter;
+		this.settings = settings;
+		this.allowPublished = allowPublished;
+		this.allowSite = allowSite;
+		this.source = mode === 'editor' ? 'editor' : mode === 'content' ? 'content' : 'published';
+		this.reports = {content: null, editor: null, published: null, site: null};
 		this.filter = 'all';
 		this.highlighted = [];
 		this.open = false;
@@ -181,11 +185,28 @@ export class ScannerPanel {
 
 		const tab = (source, active) =>
 			`<li class="nav-item" role="none"><button aria-selected="${active}" class="nav-link ${active ? 'active' : ''} btn btn-unstyled" data-source="${source}" role="tab" type="button">${escapeHtml(t(`source-${source}`))}</button></li>`;
-		const sourceTabs = `
+		const sources = [];
+		if (this.mode === 'content') {
+			sources.push('content');
+		}
+		else {
+			if (this.mode === 'editor') {
+				sources.push('editor');
+			}
+			if (this.allowPublished || this.mode !== 'editor') {
+				sources.push('published');
+			}
+			if (this.allowSite) {
+				sources.push('site');
+			}
+		}
+		// A single source needs no tab strip.
+		const sourceTabs = sources.length > 1
+			? `
 			<ul class="nav nav-tabs flex-shrink-0 px-3" data-sources role="tablist">
-				${this.mode === 'editor' ? tab('editor', true) + tab('published', false) : tab('published', true)}
-				${tab('site', false)}
-			</ul>`;
+				${sources.map((source, i) => tab(source, i === 0)).join('')}
+			</ul>`
+			: '';
 
 		this.host.innerHTML = `
 			<button aria-controls="${this.panelId}" aria-expanded="false" class="btn btn-primary btn-monospaced btn-lg lfr-accessibility-scanner__fab" title="${escapeHtml(t('toggle'))}" type="button">
@@ -245,6 +266,63 @@ export class ScannerPanel {
 
 		if (this.mode === 'editor') {
 			this.dockToolbarButton();
+		}
+		if (this.mode === 'content') {
+			this.host.classList.add('lfr-accessibility-scanner--content');
+			this.hookPublish();
+		}
+	}
+
+	/**
+	 * CMS publishing: the content editor fires `contentEditor:validateForm`
+	 * before submitting and any listener can cancel it. When the site blocks
+	 * publishing with critical issues, the first click is held, the content is
+	 * scanned and the publish goes ahead only when nothing critical is left.
+	 */
+	hookPublish() {
+		if (this.adapter?.kind !== 'cms' || !this.settings.blockPublishOnCritical || !window.Liferay?.on) {
+			return;
+		}
+		this.publishHandle = window.Liferay.on('contentEditor:validateForm', (payload) => {
+			const event = payload?.event;
+			if (this.destroyed || !event || event.defaultPrevented) {
+				return;
+			}
+			if (this.publishApproved) {
+				this.publishApproved = false;
+				return;
+			}
+			event.preventDefault();
+			const trigger = event.submitter || event.target?.closest?.('button, [type="submit"]') || null;
+			this.checkBeforePublish(trigger);
+		});
+	}
+
+	async checkBeforePublish(trigger) {
+		this.toast(t('publish-checking'), 'info');
+		this.source = 'content';
+		this.reports.content = null;
+		await this.scan();
+		const critical = (this.reports.content?.findings || []).filter((f) => !f.needsReview && f.impact === 'critical');
+		if (critical.length) {
+			this.filter = 'critical';
+			this.render();
+			this.toggle(true);
+			this.toast(t('publish-blocked', critical.length), 'danger');
+			return;
+		}
+		this.publishApproved = true;
+		if (trigger?.isConnected) {
+			trigger.click();
+		}
+		else if (this.adapter.root.requestSubmit) {
+			this.adapter.root.requestSubmit();
+		}
+	}
+
+	toast(message, type) {
+		if (window.Liferay?.Util?.openToast) {
+			window.Liferay.Util.openToast({message, type});
 		}
 	}
 
@@ -313,6 +391,7 @@ export class ScannerPanel {
 			'.page-editor__item-configuration-sidebar, [aria-label="Configuration Panel"]'
 		);
 		const bar =
+			this.adapter?.toolbar?.() ||
 			document.querySelector('.page-editor__toolbar') ||
 			document.querySelector('.control-menu-container');
 
@@ -338,6 +417,7 @@ export class ScannerPanel {
 	/** Removes everything the panel added to the page (SPA navigation away). */
 	destroy() {
 		this.siteAbort?.abort();
+		this.publishHandle?.detach?.();
 		this.toolbarObserver?.disconnect();
 		this.sidebarObserver?.disconnect();
 		this.frame?.remove();
@@ -354,7 +434,9 @@ export class ScannerPanel {
 		this.panel.hidden = !this.open;
 		this.syncToggles();
 		if (this.open) {
-			this.checkStaleScan();
+			if (this.allowSite) {
+				this.checkStaleScan();
+			}
 			if (this.source === 'site') {
 				this.renderSite();
 			}
@@ -599,7 +681,10 @@ export class ScannerPanel {
 		this.results.innerHTML = `<p class="px-3 pt-3 text-3 text-secondary">${escapeHtml(t('scanning'))}</p><div class="py-4 text-center"><span aria-hidden="true" class="loading-animation loading-animation-sm"></span></div>`;
 		try {
 			let report;
-			if (source === 'published' && this.mode === 'editor') {
+			if (source === 'content') {
+				report = await runContentScan(this.adapter);
+			}
+			else if (source === 'published' && this.mode === 'editor') {
 				report = await this.scanPublished();
 			}
 			else {
@@ -607,7 +692,7 @@ export class ScannerPanel {
 			}
 			// Page-level content checks (translations, alt texts, style book tokens)
 			// join the DOM findings; they come from the APIs, so they are best effort.
-			try {
+			if (source !== 'content') try {
 				const model = await runModelScan({mode: this.mode, pageLevelOnly: true});
 				model.findings.forEach((f) => {
 					f.context.fragmentElement = this.findDraftItem(f.context.itemId);
@@ -764,16 +849,29 @@ export class ScannerPanel {
 		const violations = this.findings.filter((f) => !f.needsReview);
 		const fragments = new Set(violations.map((f) => groupKey(f.context)));
 
-		const primary = this.reports[this.mode === 'editor' ? 'editor' : 'published'];
+		const primary = this.reports[this.mode === 'editor' ? 'editor' : this.mode === 'content' ? 'content' : 'published'];
 		const primaryViolations = (primary?.findings || []).filter((f) => !f.needsReview);
 		const count = primary ? primaryViolations.length : violations.length;
 		this.countBadge.textContent = String(count);
 		this.countBadge.hidden = count === 0;
 		this.syncToggles();
 
-		let summary = violations.length
-			? t('summary', violations.length, fragments.size)
-			: t('no-issues');
+		let summary;
+		if (this.source === 'content') {
+			const fields = new Set(violations.map((f) => f.context.fragmentName));
+			summary = !report?.fieldCount && !violations.length
+				? t('no-content-fields')
+				: violations.length === 1
+					? t('content-summary-one')
+					: violations.length
+						? fields.size === 1
+							? t('content-summary-one-field', violations.length)
+							: t('content-summary', violations.length, fields.size)
+						: t('no-content-issues');
+		}
+		else {
+			summary = violations.length ? t('summary', violations.length, fragments.size) : t('no-issues');
+		}
 		if (this.source === 'published' && report?.publishedURL) {
 			summary += ` ${t('published-note')}`;
 		}
@@ -858,7 +956,8 @@ export class ScannerPanel {
 									const i = index++;
 									f.index = i;
 									const canHighlight = Boolean(f.element || f.context.fragmentElement);
-									const canSelect = this.mode === 'editor' && Boolean(f.context.fragmentElement);
+									const canSelect = (this.mode === 'editor' || this.mode === 'content') && Boolean(f.context.fragmentElement);
+									const selectLabel = this.mode === 'content' ? t('go-to-field') : t('select-in-editor');
 									return `
 							<li class="list-group-item px-0 py-2">
 								<div class="autofit-row autofit-row-center mb-1">
@@ -868,7 +967,7 @@ export class ScannerPanel {
 									<div class="autofit-col">
 										<div class="btn-group" role="group">
 											<button class="btn btn-xs btn-secondary btn-monospaced" data-action="highlight" data-index="${i}" ${canHighlight ? '' : 'disabled'} title="${escapeHtml(canHighlight ? t('highlight') : t('not-in-editor'))}" type="button">${icon('view')}<span class="sr-only">${escapeHtml(t('highlight'))}</span></button>
-											${this.mode === 'editor' ? `<button class="btn btn-xs btn-secondary btn-monospaced" data-action="select" data-index="${i}" ${canSelect ? '' : 'disabled'} title="${escapeHtml(t('select-in-editor'))}" type="button">${icon('select-from-list')}<span class="sr-only">${escapeHtml(t('select-in-editor'))}</span></button>` : ''}
+											${this.mode === 'editor' || this.mode === 'content' ? `<button class="btn btn-xs btn-secondary btn-monospaced" data-action="select" data-index="${i}" ${canSelect ? '' : 'disabled'} title="${escapeHtml(selectLabel)}" type="button">${icon('select-from-list')}<span class="sr-only">${escapeHtml(selectLabel)}</span></button>` : ''}
 										</div>
 									</div>
 								</div>
@@ -980,6 +1079,13 @@ export class ScannerPanel {
 		this.highlight(finding);
 		const fragment = finding.context.fragmentElement;
 		if (!fragment) {
+			return;
+		}
+		if (this.mode === 'content') {
+			// Put the caret in the field's editor: CKEditor 4 iframe, CKEditor 5 or inline.
+			const frame = fragment.querySelector('iframe.cke_wysiwyg_frame');
+			const editable = frame?.contentDocument?.body || fragment.querySelector('.ck-editor__editable, [contenteditable="true"]');
+			editable?.focus?.();
 			return;
 		}
 		const topper = fragment.closest('.page-editor__topper') || fragment;
