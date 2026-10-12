@@ -59,6 +59,9 @@ sleep 20
 echo "[$TAG] running the smoke test"
 LIFERAY_URL="http://127.0.0.1:${PORT}" LIFERAY_AUTH="test@liferay.com:test" node scripts/compat-smoke.mjs dist/accessibility-scanner-fragments.zip > "${OUT}" 2>&1
 status=$?
+echo "[$TAG] running the content editors smoke test"
+LIFERAY_URL="http://127.0.0.1:${PORT}" LIFERAY_AUTH="test@liferay.com:Compat-test-2026!" node scripts/content-smoke.mjs >> "${OUT}" 2>&1
+[ $? -ne 0 ] && status=1
 cat "${OUT}"
 {
 	echo "---- server errors mentioning the extension"
@@ -66,7 +69,7 @@ cat "${OUT}"
 } >> "${OUT}"
 summary=$(tail -1 "$(ls -t "${OUT}")" 2>/dev/null)
 if [ ${status} -eq 0 ]; then
-	echo "${TAG} $(date +%F) PASS $(grep -c '^PASS' "${OUT}") checks" >> "${LOG}"
+	echo "${TAG} $(date +%F) PASS $(grep -c '^PASS' "${OUT}") checks$(grep '^SKIP' "${OUT}" | cut -c7- | sed 's/^/; skipped /' | paste -sd' ' -)" >> "${LOG}"
 else
 	echo "${TAG} $(date +%F) FAIL $(grep '^FAIL' "${OUT}" | cut -c7- | paste -sd';' -)" >> "${LOG}"
 fi

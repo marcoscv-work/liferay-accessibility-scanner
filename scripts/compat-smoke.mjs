@@ -97,7 +97,14 @@ async function signIn(pass) {
 	const action = /<form[^>]*?action="([^"]*p_p_id=com_liferay_login_web_portlet_LoginPortlet[^"]*)"/s.exec(html)?.[1]?.replace(/&amp;/g, '&');
 	const token = /authToken\s*[:=]\s*['"]([A-Za-z0-9]+)/.exec(html)?.[1];
 	if (!action) {
-		throw new Error('login form not found');
+		// Older releases render the form differently; use it interactively.
+		await page.goto(`${base}/c/portal/login`);
+		await page.fill('input[name$="_login"]', login);
+		await page.fill('input[name$="_password"]', pass);
+		await page.locator('input[name$="_password"]').press('Enter');
+		await page.waitForURL((url) => !/sign-in|\/login|LoginPortlet/.test(url.href), {timeout: 60000}).catch(() => {});
+		await page.waitForLoadState('load');
+		return;
 	}
 	await context.request.post(action, {
 		form: {

@@ -96,6 +96,36 @@ The editor DOM is not what visitors get: the editor adds classes, `tabindex` and
 
 `scripts/demo-page.json` is the payload used to create `/web/guest/accessibility-demo`: default heading, button and card texts, two "Read more" links to different pages, a link opening a new tab, an image whose alt is a file name and a second `h1`. Open it with `?p_l_mode=edit` or `?accessibilityScan=1`.
 
+## Content editors
+
+The same global JavaScript joins three authoring screens, detected by their DOM:
+
+| Screen | Detected by | What is checked |
+|---|---|---|
+| CMS content editor (spaces) | `/web/cms/e/...` with `.content-editor__toolbar` and the form fragment | Every rich text field |
+| Web Content editor | `form.edit-article-form` (Journal) | Every rich text field of the structure, image fields without description (alt) |
+| Blogs editor | `form.edit-entry` of the Blogs portlets | Entry body |
+
+The HTML of each rich text field is read through the editor API (CKEditor 4 in an iframe, CKEditor 5, or AlloyEditor inline), parsed inert (no scripts, handlers or frames), rendered off-screen and audited field by field with axe and the Liferay rules. Styling and page-level rules (contrast, landmarks, page title) are off there, and a content rule flags level 1 headings inside the body. The drawer shows one **Content** tab with a "Go to the field" action.
+
+**CMS publish gate.** The CMS editor fires `contentEditor:validateForm` before publishing. When the site setting *Block publishing CMS content with critical issues* is on, the first Publish click is held, the content is scanned, and publishing continues only when no critical issue is left; otherwise the drawer opens filtered to the critical issues. Web Content and Blogs have no such hook, so they only report.
+
+## Per-site settings
+
+The Objects client extension adds **Accessibility Settings** (site scoped, under Site Administration > Configuration). Every switch turns something off, so a site without an entry keeps the default behavior on every version:
+
+- Hide the panel in the page editor
+- Disable the published page scan
+- Disable site scans
+- Disable checks in the CMS content editor, the web content editor or the blogs editor
+- Block publishing CMS content with critical issues (off by default)
+
+CMS spaces hold instance-wide content, so the CMS reads the settings of the **Global** site. Who may run site scans is governed by permissions: the Site tab shows only when the user's role can add Accessibility Scan entries.
+
+## Compatibility testing
+
+`scripts/compat-test.sh <tag>` boots an official `liferay/dxp` Docker image, deploys the client extensions and runs `scripts/compat-smoke.mjs` (sign in, loader, objects, editor panel, Draft, Published and Site scans, SPA teardown, fragment import) and `scripts/content-smoke.mjs` (CMS, Web Content and Blogs editors). Results are appended to `marketplace/compatibility.log`. Gotchas learned the hard way: use `127.0.0.1`, not `localhost`, because cookies ignore ports and would mix with any other local portal; fresh images force a password change and open first-visit modals; quarterly releases require the `x-csrf-token` header on every session call, GET included; the headless delivery structures list depends on the search index, so tests read structures through the data engine.
+
 ## Product site
 
 `site/` is the static product website, deployed to GitHub Pages by `.github/workflows/pages.yml` on every push to `master` that touches it (plain HTML, CSS and a few lines of JavaScript; Lexend and Source Sans 3 from Google Fonts). Design direction from the UI/UX Pro Max skill: Hero + Features + CTA pattern, Minimalism and Swiss style, light mode, orange accent. The screenshots under `site/assets/shots` are real product captures taken with `scripts/storefront-shots.mjs` against the local bundle (1920x1080 at 2x, element shots with margins, WebP next to each PNG); they double as Marketplace storefront images. `scripts/propagate-fragment.mjs` propagates a re-imported fragment to the pages using it (what the Fragments admin does from Usages, driven with Playwright). Both scripts need `NODE_PATH` pointing at a `node_modules` with Playwright.

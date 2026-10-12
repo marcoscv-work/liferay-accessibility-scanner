@@ -14,9 +14,9 @@ Everything the Liferay Marketplace publishing wizard asks for, ready to copy and
 
 ### Description (≤2000 characters, plain text, the storefront drops line breaks)
 
-Accessibility Scanner brings WCAG scanning into the Liferay page editor. It runs axe-core together with nine rules that understand how Liferay pages are built, so every finding points at the fragment, editable or widget to fix instead of a CSS selector, and can be highlighted or selected in the editor. Three scopes in one drawer: Draft audits the page you are editing; Published loads the public URL as an anonymous visitor and maps the results back to your draft fragments; Site scans every public and private page of the site, in light and dark when the theme defines a dark scheme, and stores scans, pages and findings in site-scoped Objects with a score per page, a delta against the previous scan and a stale-scan notice. Content checks go beyond the DOM through Liferay's APIs: missing translations, image fragments without alt text, Documents and Media images without description, style book token contrast and page titles. Each scanned page records the theme and style book it was served with, so design issues are attributed to the design. The included Accessibility Report fragment renders score, issues by impact, trend, pages, rules, fragments, themes and style books from the Objects, with a light or dark switch, for anyone on the team. Everything runs in the author's browser with the author's session: no external service, no telemetry, no browser plugin, no microservice. Multisite ready: Objects are scoped per site. Requirements: Liferay DXP quarterly release with client extensions, Objects and the page editor (tested versions listed below), a current Chrome, Edge, Firefox or Safari. Automated checks find a share of WCAG failures; findings marked "needs review" tell you where a person has to look. Documentation and rule reference: https://github.com/marcoscv-work/liferay-accessibility-scanner
+Accessibility Scanner brings WCAG scanning into Liferay authoring. It runs axe-core with nine rules that understand how Liferay pages are built, so every finding points at the fragment, editable or widget to fix instead of a CSS selector. In the page editor, one drawer offers three scopes: Draft audits the page you are editing; Published loads the public page as an anonymous visitor and maps results back to your fragments; Site scans every page, in light and dark when the theme defines a dark scheme, and stores scores, deltas and findings in site-scoped Objects. It also checks content where it is written: the CMS content editor, Web Content and Blogs. The HTML of every rich text field is audited for missing alternative text, heading structure, vague or repeated link texts and more, and in the CMS a site can block publishing while critical issues remain. Content checks go beyond the DOM through Liferay APIs: missing translations, images without alternative text in fragments and Documents and Media, style book token contrast and page titles. Each scanned page records its theme and style book, so design issues reach the design owner. The Accessibility Report fragment shows score, issues by impact, trend, pages, rules, fragments, themes and style books for the whole team. Administrators decide per site what is available with the Accessibility Settings object, and who can run site scans through regular permissions. Everything runs in the author's browser with the author's session: no external service, no telemetry, no browser plugin, no microservice. Requirements: Liferay DXP 2026.Q2 or 2026.Q3 and a current browser. Automated checks find a share of WCAG failures; findings marked needs review show where a person has to look. Documentation: https://github.com/marcoscv-work/liferay-accessibility-scanner
 
-(1,713 characters)
+(1827 characters)
 
 ## Build
 
@@ -46,7 +46,7 @@ Regenerate with `scripts/storefront-shots.mjs` (raw captures from the local bund
 | Field | Value |
 |---|---|
 | Version | 1.0.0 |
-| Release notes | First release. Draft, Published and Site scans from the page editor with axe-core 4.14 and nine Liferay-aware rules; content checks through Liferay APIs; site-scoped Objects with score, trend and theme and style book per page; Accessibility Report fragment with a light and dark switch. |
+| Release notes | First release. Draft, Published and Site scans from the page editor with axe-core 4.14 and nine Liferay-aware rules; rich text checks in the CMS content editor, Web Content and Blogs, with an optional publish gate for critical issues in the CMS; content checks through Liferay APIs; per-site Accessibility Settings; site-scoped Objects with score, trend and theme and style book per page; Accessibility Report fragment with a light and dark switch. |
 
 ## Pricing and licensing
 
@@ -66,18 +66,24 @@ Free, perpetual, no trial (wizard defaults).
 
 ## Compatibility matrix
 
-Declare only green rows. Test with the official Docker images (API smoke through a session cookie, then the editor panel and a site scan in a real browser session).
+Declare only green rows. Each row is a full run of `scripts/compat-test.sh` on the official `liferay/dxp` Docker image: sign in, loader, objects, editor panel, Draft, Published and Site scans, SPA teardown, report fragment import, and the CMS, Web Content and Blogs editors. Raw results: `marketplace/compat-<tag>.txt`.
 
-| Version | Image | Date | Tester | Result |
+| Version | Image | Date | Result | Notes |
 |---|---|---|---|---|
-| Master (local bundle, October 2026) | source build | 2026-10-12 | Marcos | green: editor, published, site scan, report |
-| 2026.Q3 | `liferay/dxp:2026.q3.x` | | | pending |
-| 2026.Q2 | `liferay/dxp:2026.q2.x` | | | pending |
+| 2026.Q3 | `liferay/dxp:2026.q3.6` | 2026-10-12 | **green, 13 of 13** | CMS, Web Content and Blogs editors all checked |
+| 2026.Q2 | `liferay/dxp:2026.q2.12` | 2026-10-12 | **green, 12 of 12** | No CMS in this release, so the CMS check does not apply |
+| 2026.Q1 LTS | `liferay/dxp:2026.q1.9-lts` | 2026-10-12 | not tested | The image's trial license expired in March 2026; needs a development key |
+| 2025.Q4 | `liferay/dxp:2025.q4.12` | 2026-10-12 | not tested | Same expired trial license |
+| Master | local source build | 2026-10-12 | green | Development reference |
+
+Declare **2026.Q2 and 2026.Q3** in the wizard. Add 2026.Q1 LTS and 2025.Q4 in a later version once tested with a valid key.
+
+Fixes the matrix found: quarterly releases require the `x-csrf-token` header on every session call to `/o/`, GET included (master does not); the headless admin site pages API is still a beta flag there, so pages are listed through JSON-WS; two published scans started together removed each other's frame.
 
 ## Open items before submitting
 
 1. Merge the two client extension zips into one package named after the shared baseURL, or declare both packages.
 2. Fill in publisher website and support email.
 3. Write the install and uninstall guide page.
-4. Run the compatibility matrix on at least one quarterly image and mark the result.
+4. Compatibility: done for 2026.Q2 and 2026.Q3 (see the matrix).
 5. Review the six storefront images and the icon in this folder.

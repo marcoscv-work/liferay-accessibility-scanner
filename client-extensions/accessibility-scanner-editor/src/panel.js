@@ -751,7 +751,17 @@ export class ScannerPanel {
 	 * a fallback for pages without the loader. Findings are then mapped back to
 	 * the draft fragments through the layout item id.
 	 */
-	async scanPublished() {
+	/** One published scan at a time: a second request (tab click plus Rescan) joins the running one. */
+	scanPublished() {
+		if (!this.publishedRun) {
+			this.publishedRun = this.runPublishedScan().finally(() => {
+				this.publishedRun = null;
+			});
+		}
+		return this.publishedRun;
+	}
+
+	async runPublishedScan() {
 		const url = await resolvePublishedURL();
 		if (!url) {
 			throw new Error(t('published-unavailable'));
@@ -804,7 +814,33 @@ export class ScannerPanel {
 			throw new Error('scanner did not start in the frame');
 		}
 
-		const report = await win.__lfrAccessibilityRunScan();
+		// The published URL can redirect inside the frame; a scanner from the
+		// previous document would audit a detached page. Wait for a settled
+		// document and retry once if the frame moved during the scan.
+		let report;
+		for (let attempt = 0; attempt < 3; attempt++) {
+			const settle = Date.now() + 15000;
+			while (Date.now() < settle && frame.contentDocument?.readyState !== 'complete') {
+				await new Promise((r) => setTimeout(r, 150));
+			}
+			await new Promise((r) => setTimeout(r, 400));
+			win = frame.contentWindow;
+			if (typeof win?.__lfrAccessibilityRunScan !== 'function' || !frame.contentDocument?.body) {
+				continue;
+			}
+			try {
+				report = await win.__lfrAccessibilityRunScan();
+				break;
+			}
+			catch (error) {
+				if (attempt === 2) {
+					throw error;
+				}
+			}
+		}
+		if (!report) {
+			throw new Error('scanner did not start in the frame');
+		}
 		report.publishedURL = url;
 		report.findings.forEach((finding) => {
 			finding.publishedElement = finding.element;

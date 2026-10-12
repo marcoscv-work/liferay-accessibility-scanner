@@ -1,0 +1,21 @@
+PASS  sign in  (http://127.0.0.1:8081/web/guest)
+PASS  globalJS loader on rendered pages  (/o/accessibility-scanner-editor/index.b262a413.js)
+PASS  Accessibility Scan objects (site scoped, session write)  (list 200, post 200)
+PASS  editor toolbar button and drawer  (docked in the editor toolbar)
+PASS  Draft scan  (4 issues in 2 fragments)
+PASS  Published scan  (3 issues in 1 fragments)
+PASS  Site scan stored in objects  (2 pages, score 96, 3 violations)
+PASS  Panel torn down outside the editor  (no panel nodes)
+PASS  Report fragment collection import  (Accessibility Report)
+PASS  no uncaught page errors from the scanner
+{"base":"http://127.0.0.1:8081","failed":0,"passed":10,"version":""}
+SKIP  CMS content editor  (CMS not available on this portal)
+PASS  Web Content editor  [CKEditor 5] 7 issues in 1 field All (7) Critical (1) Moderate (6)
+      rules: image-alt, heading-order, liferay-generic-link-text, liferay-duplicate-link-text, liferay-content-h1
+PASS  Blogs editor  [CKEditor 4 (_com_liferay_blogs_web_portlet_BlogsAdminPortlet_contentEditor)] 7 issues in 1 field All (7) Critical (1) Moderate (6)
+      rules: image-alt, heading-order, liferay-generic-link-text, liferay-duplicate-link-text, liferay-content-h1
+---- server errors mentioning the extension
+2026-10-12 13:54:17.873 ERROR [CM Event Dispatcher (Fire ConfigurationEvent: pid=com.liferay.client.extension.type.configuration.CETConfiguration~accessibility-scanner-objects/liferay.com)][CETConfigurationFactory:97] Unable to activate client extension LXC:accessibility-scanner-objects for company 20814320218988
+com.liferay.client.extension.exception.ClientExtensionEntryTypeException: Unknown type batch
+2026-10-12 13:54:17.900 ERROR [CM Event Dispatcher (Fire ConfigurationEvent: pid=com.liferay.client.extension.type.configuration.CETConfiguration~accessibility-scanner-objects/liferay.com)][ROOT:47] bundle com.liferay.client.extension.type.impl:1.0.46 (2503)[com.liferay.client.extension.type.internal.configuration.CETConfigurationFactory(12792)] : The activate method has thrown an exception
+com.liferay.client.extension.exception.ClientExtensionEntryTypeException: Unknown type batch

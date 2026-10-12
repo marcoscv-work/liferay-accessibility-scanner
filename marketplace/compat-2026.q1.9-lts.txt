@@ -1,0 +1,29 @@
+FAIL  sign in  (page.fill: Timeout 30000ms exceeded.)
+PASS  globalJS loader on rendered pages  (/o/accessibility-scanner-editor/index.61af6574.js)
+FAIL  Accessibility Scan objects (site scoped, session write)  (list 403, post 403 {)
+FAIL  editor toolbar button and drawer  (page.waitForSelector: Timeout 90000ms exceeded.)
+FAIL  Draft scan  (page.evaluate: TypeError: Cannot read properties of undefined (reading 'scan'))
+FAIL  Published scan  (page.evaluate: TypeError: Cannot read properties of undefined (reading 'scanPublished'))
+FAIL  Site scan stored in objects  (page.evaluate: TypeError: Cannot read properties of undefined (reading 'darkScheme'))
+PASS  Panel torn down outside the editor  (no panel nodes)
+FAIL  Report fragment collection import  (Unexpected token '<', ...")
+PASS  no uncaught page errors from the scanner
+{"base":"http://127.0.0.1:8081","failed":7,"passed":3,"version":""}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.fill: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('input[name$="_login"]')
+
+    at /Users/marcoscastro/projects/liferay-accessibility-scanner/scripts/content-smoke.mjs:56:12 {
+  name: 'TimeoutError'
+}
+
+Node.js v24.15.0
+---- server errors mentioning the extension
+2026-10-12 10:46:03.606 ERROR [CM Event Dispatcher (Fire ConfigurationEvent: pid=com.liferay.client.extension.type.configuration.CETConfiguration~accessibility-scanner-objects/liferay.com)][CETConfigurationFactory:97] Unable to activate client extension LXC:accessibility-scanner-objects for company 75576315213177
+com.liferay.client.extension.exception.ClientExtensionEntryTypeException: Unknown type batch
+2026-10-12 10:46:03.619 ERROR [CM Event Dispatcher (Fire ConfigurationEvent: pid=com.liferay.client.extension.type.configuration.CETConfiguration~accessibility-scanner-objects/liferay.com)][ROOT:47] bundle com.liferay.client.extension.type.impl:1.0.46 (830)[com.liferay.client.extension.type.internal.configuration.CETConfigurationFactory(12660)] : The activate method has thrown an exception
+com.liferay.client.extension.exception.ClientExtensionEntryTypeException: Unknown type batch
