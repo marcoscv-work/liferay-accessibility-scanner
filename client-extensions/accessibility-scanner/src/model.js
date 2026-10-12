@@ -10,7 +10,7 @@ import {apiHeaders} from './settings.js';
  */
 
 const HELP_BASE =
-	'https://github.com/marcoscv-work/liferay-accessibility-scanner/blob/main/docs/rules.md#';
+	'https://github.com/marcoscv-work/liferay-accessibility-scanner/blob/master/docs/rules.md#';
 
 const RULES = {
 	'liferay-model-document-description': {

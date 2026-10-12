@@ -14,9 +14,9 @@ Everything the Liferay Marketplace publishing wizard asks for, ready to copy and
 
 ### Description (≤2000 characters, plain text, the storefront drops line breaks)
 
-Accessibility Scanner brings WCAG scanning into Liferay authoring. It runs axe-core with nine rules that understand how Liferay pages are built, so every finding points at the fragment, editable or widget to fix instead of a CSS selector. In the page editor, Draft audits the page you are editing and Published loads the public page as an anonymous visitor and maps results back to your fragments. From the Page Tree, one button scans every page, in light and dark, stores scores, deltas and findings in site-scoped Objects, and shows each page's score next to its name. It also checks content where it is written: the CMS content editor, Web Content and Blogs. The HTML of every rich text field is audited for missing alternative text, heading structure, vague or repeated link texts and more, and in the CMS a site can block publishing while critical issues remain. Content checks go beyond the DOM through Liferay APIs: missing translations, images without alternative text in fragments and Documents and Media, style book token contrast and page titles. Each scanned page records its theme and style book, so design issues reach the design owner. The Accessibility Report fragment shows score, issues by impact, trend, pages, rules, fragments, themes and style books for the whole team. Administrators decide per site what is available with the Accessibility Settings object, and who can run site scans through regular permissions. Everything runs in the author's browser with the author's session: no external service, no telemetry, no browser plugin, no microservice. Requirements: Liferay DXP 2026.Q2 or 2026.Q3 and a current browser. Automated checks find a share of WCAG failures; findings marked needs review show where a person has to look. Documentation: https://marcoscv-work.github.io/liferay-accessibility-scanner/
+Accessibility Scanner brings WCAG scanning into Liferay authoring. It runs axe-core with nine rules that understand how Liferay pages are built, so every finding points at the fragment, editable or widget to fix instead of a CSS selector. In the page editor, Draft audits the page you are editing and Published loads the public page as an anonymous visitor and maps results back to your fragments. From the Page Tree, one button scans every page, in light and dark, stores scores, deltas and findings in site-scoped Objects, and shows each page's score next to its name. It also checks content where it is written: the CMS content editor, Web Content and Blogs. The HTML of every rich text field is audited for missing alternative text, heading structure, vague or repeated link texts and more, and in the CMS a site can block publishing while critical issues remain. Content checks go beyond the DOM through Liferay APIs: missing translations, images without alternative text in fragments and Documents and Media, style book token contrast and page titles. Each scanned page records its theme and style book, so design issues reach the design owner. The Accessibility Report fragment shows score, issues by impact, trend, pages, rules, fragments, themes and style books for the whole team. Administrators decide per site what is available with the Accessibility Settings object, and who can run site scans through regular permissions. Everything runs in the author's browser with the author's session: no external service, no telemetry, no browser plugin, no microservice. Requirements: Liferay DXP 2026.Q2 or 2026.Q3 and a current browser. Automated checks find a share of WCAG failures; findings marked needs review show where a person has to look. Documentation: https://marcoscv-work.github.io/liferay-accessibility-scanner/ Privacy: https://marcoscv-work.github.io/liferay-accessibility-scanner/privacy.html
 
-(1829 characters)
+(1913 characters)
 
 ## Build
 
@@ -61,10 +61,11 @@ Free, perpetual, no trial (wizard defaults).
 | Field | Value |
 |---|---|
 | Support URL | https://github.com/marcoscv-work/liferay-accessibility-scanner/issues |
-| Publisher website | TO CONFIRM |
-| Support email (public) | TO CONFIRM |
+| Publisher website | https://marcoscv-work.github.io/liferay-accessibility-scanner/ (same pattern as Copilot Voice) |
+| Support email (public) | marcos.castro@liferay.com (same as Copilot Voice) |
 | Phone | optional, leave empty |
-| EULA URL | optional, Marketplace default applies |
+| EULA URL | leave empty, the Marketplace standard EULA applies |
+| Privacy policy | https://marcoscv-work.github.io/liferay-accessibility-scanner/privacy.html (linked in the description) |
 | Documentation URL | https://marcoscv-work.github.io/liferay-accessibility-scanner/ |
 | Install and uninstall guide URL | https://marcoscv-work.github.io/liferay-accessibility-scanner/install.html |
 
@@ -86,5 +87,4 @@ Fixes the matrix found: quarterly releases require the `x-csrf-token` header on 
 
 ## Open items before submitting
 
-1. Fill in publisher website and support email.
-2. Compatibility of the merged package: rerun on 2026.Q2 and 2026.Q3 (see the matrix).
+1. Compatibility of the merged package: rerun on 2026.Q2 and 2026.Q3 (see the matrix).

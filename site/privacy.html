@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Privacy · Accessibility Scanner for Liferay</title>
+	<meta name="description" content="What the Accessibility Scanner for Liferay stores, where it stays and who can see it.">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="styles.css">
+	<link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="assets/logo-mark-512.png">
+</head>
+<body>
+	<a class="skip-link" href="#main">Skip to main content</a>
+
+	<header class="site-header">
+		<div class="container">
+			<a class="brand" href="index.html" aria-label="Accessibility Scanner for Liferay, home">
+				<img class="brand-mark" src="assets/logo-mark.svg" width="36" height="36" alt="">
+				<span>Accessibility Scanner<small>for Liferay DXP</small></span>
+			</a>
+			<button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Menu">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+			</button>
+			<nav class="site-nav" id="site-nav" aria-label="Primary">
+				<ul>
+					<li><a href="#runs">Where it runs</a></li>
+					<li><a href="#stores">What it stores</a></li>
+					<li><a href="#access">Who can see it</a></li>
+					<li><a href="#delete">Deleting data</a></li>
+				</ul>
+			</nav>
+			<a class="btn btn-primary btn-sm header-cta" href="index.html">Product overview</a>
+		</div>
+	</header>
+
+	<main id="main">
+		<section class="section guide-page" aria-labelledby="guide-title">
+			<div class="container">
+				<div class="section-head">
+					<p class="eyebrow">Privacy</p>
+					<h1 id="guide-title">Your content stays in your portal</h1>
+					<p>The Accessibility Scanner has no servers of its own. It collects nothing for its publisher and sends nothing to third parties.</p>
+				</div>
+
+				<article class="guide">
+					<h2 id="runs">Where it runs</h2>
+					<ul>
+						<li>The scanner runs in the author's browser, with the author's portal session and permissions.</li>
+						<li>Pages and content are read from your own portal and audited in that browser.</li>
+						<li>The extension makes no calls outside your portal. It has no telemetry or analytics, sets no cookies and uses no browser storage.</li>
+						<li>The help links in a finding open the W3C or the rule documentation on GitHub, only when someone clicks them.</li>
+					</ul>
+
+					<h2 id="stores">What it stores</h2>
+					<p>Draft, Published and content editor checks store nothing. Only a site scan saves results, as entries of site-scoped Objects in your portal's database:</p>
+					<ul>
+						<li><strong>Accessibility Scan:</strong> site, date, language, viewport, score, issue counts and scanner version.</li>
+						<li><strong>Scanned Page:</strong> page title, URL, theme, style book, color scheme and score.</li>
+						<li><strong>Accessibility Finding:</strong> rule, impact, WCAG criterion, message, the element's CSS selector, a short HTML excerpt of that element, and the fragment or widget it belongs to.</li>
+						<li><strong>Accessibility Setting:</strong> the switches an administrator sets for the site.</li>
+					</ul>
+					<p>Like any Object entry, each one also records the user who created it and when. HTML excerpts come from the pages being scanned, so they can include text that is published on those pages.</p>
+
+					<h2 id="access">Who can see it</h2>
+					<p>Access follows your portal's permissions on these Objects, site by site. The Accessibility Report fragment reads the scans with the visitor's own session, so people without permission see nothing.</p>
+
+					<h2 id="delete">Deleting data</h2>
+					<p>Site administrators can delete scans, pages and findings from Site Menu, Content &amp; Data. Deleting the object definitions in Control Panel, Objects removes all of it. Uninstalling the extension alone keeps the data, as the <a href="install.html#uninstall">install guide</a> explains.</p>
+
+					<h2 id="contact">Contact</h2>
+					<p>Questions about this page go to <a href="https://github.com/marcoscv-work/liferay-accessibility-scanner/issues">GitHub issues</a>.</p>
+				</article>
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<div class="container">
+			<p style="margin: 0;">© <span data-year>2026</span> Accessibility Scanner for Liferay. Built with axe-core and Clay. Not an official Liferay product.</p>
+			<ul>
+				<li><a href="https://github.com/marcoscv-work/liferay-accessibility-scanner">GitHub</a></li>
+				<li><a href="index.html">Product overview</a></li>
+				<li><a href="install.html">Install guide</a></li>
+				<li><a href="https://github.com/marcoscv-work/liferay-accessibility-scanner/blob/master/docs/rules.md">Rule documentation</a></li>
+			</ul>
+		</div>
+	</footer>
+
+	<script src="script.js" defer></script>
+</body>
+</html>

@@ -6,7 +6,7 @@
  * Checks return true (pass), false (fail) or undefined (needs human review).
  */
 
-const HELP_BASE = 'https://github.com/marcoscv-work/liferay-accessibility-scanner/blob/main/docs/rules.md#';
+const HELP_BASE = 'https://github.com/marcoscv-work/liferay-accessibility-scanner/blob/master/docs/rules.md#';
 
 /** Default texts shipped by the OOTB basic component fragments. */
 const PLACEHOLDER_TEXTS = [
