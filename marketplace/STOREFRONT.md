@@ -74,8 +74,8 @@ Declare only green rows. Each row is a full run of `scripts/compat-test.sh` on t
 
 | Version | Image | Date | Result | Notes |
 |---|---|---|---|---|
-| 2026.Q3 | `liferay/dxp:2026.q3.6` | 2026-10-12 | **green, 13 of 13** | CMS, Web Content and Blogs editors all checked |
-| 2026.Q2 | `liferay/dxp:2026.q2.12` | 2026-10-12 | **green, 12 of 12** | No CMS in this release, so the CMS check does not apply |
+| 2026.Q3 | `liferay/dxp:2026.q3.6` | 2026-10-12 | **green, 14 of 14** | Page editor, Page Tree, site scan, objects, fragment, CMS, Web Content and Blogs |
+| 2026.Q2 | `liferay/dxp:2026.q2.12` | 2026-10-12 | **green, 13 of 13** | No CMS in this release, so the CMS check does not apply |
 | 2026.Q1 LTS | `liferay/dxp:2026.q1.9-lts` | 2026-10-12 | not tested | The image's trial license expired in March 2026; needs a development key |
 | 2025.Q4 | `liferay/dxp:2025.q4.12` | 2026-10-12 | not tested | Same expired trial license |
 | Master | local source build | 2026-10-12 | green | Development reference |

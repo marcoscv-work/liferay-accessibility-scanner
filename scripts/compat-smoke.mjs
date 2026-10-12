@@ -31,6 +31,23 @@ const fragmentsZip = process.argv[2];
 const results = [];
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+/** Fresh images open first-visit modals (terms of use, welcome); close them. */
+async function dismissModals() {
+	for (let i = 0; i < 4; i++) {
+		await sleep(800);
+		if (!(await page.$('.modal.show'))) {
+			return;
+		}
+		const button = page.locator('.modal.show button:has-text("Done"), .modal.show button:has-text("Got It"), .modal.show button:has-text("Close"), .modal.show .close').first();
+		if (await button.count()) {
+			await button.click().catch(() => {});
+		}
+		else {
+			await page.keyboard.press('Escape');
+		}
+	}
+}
+
 /** Panel text once no scan is running (opening the drawer starts one by itself). */
 async function settledPanelText(timeout = 120000) {
 	const deadline = Date.now() + timeout;
@@ -256,6 +273,7 @@ await check('Site scan stored in objects', async () => {
 await check('Page Tree button and score stickers', async () => {
 	await page.goto(`${base}/web/guest`);
 	await page.waitForLoadState('load');
+	await dismissModals();
 	if (!(await page.$('.pages-tree'))) {
 		await page.locator('[data-qa-id="productMenu"]').first().click();
 		await sleep(1500);
