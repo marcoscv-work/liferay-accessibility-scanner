@@ -258,14 +258,10 @@ ul {
 }
 
 .brand-mark {
-	align-items: center;
-	background: var(--accent);
-	border-radius: 10px;
-	color: #fff;
-	display: inline-grid;
+	border-radius: 9px;
+	display: block;
 	flex-shrink: 0;
 	height: 2.25rem;
-	place-items: center;
 	width: 2.25rem;
 }
 

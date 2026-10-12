@@ -130,6 +130,10 @@ CMS spaces hold instance-wide content, so the CMS reads the settings of the **Gl
 
 `scripts/compat-test.sh <tag>` boots an official `liferay/dxp` Docker image, deploys the client extensions and runs `scripts/compat-smoke.mjs` (sign in, loader, objects, editor panel, Draft, Published and Site scans, SPA teardown, fragment import) and `scripts/content-smoke.mjs` (CMS, Web Content and Blogs editors). Results are appended to `marketplace/compatibility.log`. Gotchas learned the hard way: use `127.0.0.1`, not `localhost`, because cookies ignore ports and would mix with any other local portal; fresh images force a password change and open first-visit modals; quarterly releases require the `x-csrf-token` header on every session call, GET included; the headless delivery structures list depends on the search index, so tests read structures through the data engine.
 
+## Brand
+
+`brand/` holds the logo: `logo-mark.svg` (orange rounded square with a magnifier over the accessibility figure; the Marketplace icon and the site favicon), `logo-horizontal.svg` and `logo-horizontal-dark.svg` (mark plus the name), and PNG exports. Fonts in the wordmark: Lexend Bold and Source Sans 3 SemiBold.
+
 ## Product site
 
 `site/` is the static product website, deployed to GitHub Pages by `.github/workflows/pages.yml` on every push to `master` that touches it (plain HTML, CSS and a few lines of JavaScript; Lexend and Source Sans 3 from Google Fonts). Design direction from the UI/UX Pro Max skill: Hero + Features + CTA pattern, Minimalism and Swiss style, light mode, orange accent. The screenshots under `site/assets/shots` are real product captures taken with `scripts/storefront-shots.mjs` against the local bundle (1920x1080 at 2x, element shots with margins, WebP next to each PNG); they double as Marketplace storefront images. `scripts/propagate-fragment.mjs` propagates a re-imported fragment to the pages using it (what the Fragments admin does from Usages, driven with Playwright). Both scripts need `NODE_PATH` pointing at a `node_modules` with Playwright.

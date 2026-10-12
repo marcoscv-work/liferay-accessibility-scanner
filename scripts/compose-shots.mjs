@@ -128,17 +128,7 @@ for (const comp of [...COMPOSITIONS, ...MARKETPLACE]) {
 	console.log('composed', comp.name);
 }
 const icon = await browser.newPage({deviceScaleFactor: 1, viewport: {height: 1024, width: 1024}});
-await icon.setContent(`<!doctype html><html><body style="margin:0;background:transparent">
-<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-	<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f97316"/><stop offset="1" stop-color="#c2410c"/></linearGradient></defs>
-	<rect width="1024" height="1024" rx="224" fill="url(#g)"/>
-	<g fill="none" stroke="#fff" stroke-width="64" stroke-linecap="round" stroke-linejoin="round">
-		<circle cx="512" cy="236" r="62" fill="#fff" stroke="none"/>
-		<path d="M292 372h440M512 372v220M512 592l-132 232M512 592l132 232"/>
-	</g>
-	<circle cx="776" cy="776" r="150" fill="#0f172a"/>
-	<path d="M708 780l44 44 92-100" fill="none" stroke="#fb923c" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></body></html>`);
+await icon.setContent(`<!doctype html><html><body style="margin:0;background:transparent">${fs.readFileSync(path.resolve('brand/logo-mark.svg'), 'utf8').replace('<svg ', '<svg width="1024" height="1024" ')}</body></html>`);
 await icon.screenshot({omitBackground: true, path: path.resolve('marketplace/icon-1024.png')});
 await icon.close();
 console.log('composed icon-1024');

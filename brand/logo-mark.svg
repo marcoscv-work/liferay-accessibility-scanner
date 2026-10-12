@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Accessibility Scanner for Liferay">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fb923c"/>
+      <stop offset="1" stop-color="#c2410c"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="224" fill="url(#bg)"/>
+  <!-- Handle -->
+  <path d="M640 640 L812 812" stroke="#0f172a" stroke-width="104" stroke-linecap="round"/>
+  <path d="M640 640 L812 812" stroke="#ffffff" stroke-width="64" stroke-linecap="round"/>
+  <!-- Lens -->
+  <circle cx="452" cy="452" r="252" fill="#ffffff" fill-opacity="0.14" stroke="#ffffff" stroke-width="64"/>
+  <!-- Accessibility figure inside the lens -->
+  <circle cx="452" cy="318" r="50" fill="#ffffff"/>
+  <g fill="none" stroke="#ffffff" stroke-width="44" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M318 404 H586"/>
+    <path d="M452 404 V500"/>
+    <path d="M452 500 L384 614"/>
+    <path d="M452 500 L520 614"/>
+  </g>
+</svg>
