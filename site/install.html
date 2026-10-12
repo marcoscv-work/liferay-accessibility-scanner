@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Install guide · Accessibility Scanner for Liferay</title>
+	<meta name="description" content="How to install, configure, upgrade and uninstall the Accessibility Scanner for Liferay client extension.">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="styles.css">
+	<link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="assets/logo-mark-512.png">
+</head>
+<body>
+	<a class="skip-link" href="#main">Skip to main content</a>
+
+	<header class="site-header">
+		<div class="container">
+			<a class="brand" href="index.html" aria-label="Accessibility Scanner for Liferay, home">
+				<img class="brand-mark" src="assets/logo-mark.svg" width="36" height="36" alt="">
+				<span>Accessibility Scanner<small>for Liferay DXP</small></span>
+			</a>
+			<button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Menu">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+			</button>
+			<nav class="site-nav" id="site-nav" aria-label="Primary">
+				<ul>
+					<li><a href="#install">Install</a></li>
+					<li><a href="#report">Report</a></li>
+					<li><a href="#configure">Configure</a></li>
+					<li><a href="#upgrade">Upgrade</a></li>
+					<li><a href="#uninstall">Uninstall</a></li>
+				</ul>
+			</nav>
+			<a class="btn btn-primary btn-sm header-cta" href="index.html">Product overview</a>
+		</div>
+	</header>
+
+	<main id="main">
+		<section class="section guide-page" aria-labelledby="guide-title">
+			<div class="container">
+				<div class="section-head">
+					<p class="eyebrow">Install guide</p>
+					<h1 id="guide-title">Install, configure and remove the Accessibility Scanner</h1>
+					<p>One client extension package brings the scanner and its Objects. The report fragment ships inside it. Nothing runs outside your portal.</p>
+				</div>
+
+				<article class="guide">
+					<h2 id="requirements">Requirements</h2>
+					<ul>
+						<li>Liferay DXP 2026.Q2 or 2026.Q3, self-hosted, PaaS or SaaS.</li>
+						<li>A current browser for authors: Chrome, Edge, Firefox or Safari.</li>
+						<li>An administrator who can deploy client extensions.</li>
+					</ul>
+
+					<h2 id="install">Install</h2>
+					<ol>
+						<li>On the Marketplace listing, choose <strong>Get App</strong> and download <code>accessibility-scanner.zip</code>. Keep the file name as it is: the portal serves the extension at <code>/o/accessibility-scanner/</code>.</li>
+						<li>
+							Deploy the zip like any client extension.
+							<ul>
+								<li><strong>Self-hosted:</strong> copy it to the <code>deploy</code> folder in Liferay Home. The portal moves it to <code>osgi/client-extensions</code>.</li>
+								<li><strong>PaaS or SaaS:</strong> deploy it through your usual client extension pipeline or the Liferay Cloud console.</li>
+							</ul>
+						</li>
+						<li>
+							Check the result.
+							<ul>
+								<li>Site Menu, Content &amp; Data lists <strong>Accessibility Scans</strong>, <strong>Scanned Pages</strong> and <strong>Accessibility Findings</strong>.</li>
+								<li>Site Menu, Configuration lists <strong>Accessibility Settings</strong>.</li>
+								<li>Edit a content page: the Accessibility button appears in the editor toolbar.</li>
+							</ul>
+						</li>
+					</ol>
+					<p>The extension adds one script to every page. It is a small loader that fetches the scanner only in the page editor, the Page Tree and the content editors, and only for signed-in users.</p>
+
+					<h2 id="report">Add the report for your team</h2>
+					<ol>
+						<li>Download the fragment collection from your own portal: <code>https://&lt;your-portal&gt;/o/accessibility-scanner/accessibility-scanner-fragments.zip</code>.</li>
+						<li>Go to Site Menu, Design, Fragments. Open the Options menu and choose <strong>Import</strong>. Select the zip.</li>
+						<li>Place the <strong>Accessibility Report</strong> fragment on a page. Its configuration sets the trend length, the number of pages and the sections to show.</li>
+						<li>Run a site scan from the Accessibility button in the Page Tree header. The report fills in as soon as the scan ends.</li>
+					</ol>
+					<p>The report reads the scans with the visitor's session. People without permission to view Accessibility Scans see a sign-in hint instead of the data.</p>
+
+					<h2 id="configure">Configure each site</h2>
+					<p>Every feature is on by default. To change that for a site, open Site Menu, Configuration, <strong>Accessibility Settings</strong> and add one entry. Each switch turns something off or adds a check:</p>
+					<ul>
+						<li>Hide the panel in the page editor.</li>
+						<li>Disable the published page scan.</li>
+						<li>Disable site scans.</li>
+						<li>Disable checks in the CMS content editor, which reads the setting from the Global site.</li>
+						<li>Disable checks in the Web Content editor.</li>
+						<li>Disable checks in the Blogs editor.</li>
+						<li>Block publishing CMS content with critical issues.</li>
+					</ul>
+					<p>Site scans also follow regular permissions. Only roles with <strong>Add Object Entry</strong> on Accessibility Scans see the Page Tree button. Site administrators and owners have it by default. To grant or remove it, define permissions on the role under Site Administration, Content &amp; Data, Accessibility Scans.</p>
+
+					<h2 id="upgrade">Upgrade</h2>
+					<p>Deploy the new <code>accessibility-scanner.zip</code> over the old one. The Objects are updated in place and existing scans are kept. Import the fragment collection again from the same URL to get the new report, then propagate the change to the pages that use it.</p>
+
+					<h2 id="uninstall">Uninstall</h2>
+					<ol>
+						<li>Remove the client extension. Self-hosted: delete <code>accessibility-scanner.zip</code> from <code>osgi/client-extensions</code>. PaaS or SaaS: remove it from the Cloud console. The scanner stops loading at once.</li>
+						<li>Remove the Accessibility Report fragment from the pages that use it, then delete the collection in Site Menu, Design, Fragments.</li>
+						<li>The Objects and the scans they hold stay in the portal, so a reinstall picks up the history. To delete everything, delete the four object definitions in Control Panel, Objects: Accessibility Finding, Scanned Page, Accessibility Scan and Accessibility Setting. This removes their entries for good.</li>
+					</ol>
+
+					<h2 id="help">Help</h2>
+					<p>Report problems and ask questions in <a href="https://github.com/marcoscv-work/liferay-accessibility-scanner/issues">GitHub issues</a>. The <a href="https://github.com/marcoscv-work/liferay-accessibility-scanner/blob/master/docs/rules.md">rule documentation</a> explains each Liferay rule and how to fix what it finds.</p>
+				</article>
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<div class="container">
+			<p style="margin: 0;">© <span data-year>2026</span> Accessibility Scanner for Liferay. Built with axe-core and Clay. Not an official Liferay product.</p>
+			<ul>
+				<li><a href="https://github.com/marcoscv-work/liferay-accessibility-scanner">GitHub</a></li>
+				<li><a href="index.html">Product overview</a></li>
+				<li><a href="https://github.com/marcoscv-work/liferay-accessibility-scanner/blob/master/docs/rules.md">Rule documentation</a></li>
+			</ul>
+		</div>
+	</footer>
+
+	<script src="script.js" defer></script>
+</body>
+</html>

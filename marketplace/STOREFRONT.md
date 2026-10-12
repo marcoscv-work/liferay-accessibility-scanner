@@ -14,7 +14,7 @@ Everything the Liferay Marketplace publishing wizard asks for, ready to copy and
 
 ### Description (≤2000 characters, plain text, the storefront drops line breaks)
 
-Accessibility Scanner brings WCAG scanning into Liferay authoring. It runs axe-core with nine rules that understand how Liferay pages are built, so every finding points at the fragment, editable or widget to fix instead of a CSS selector. In the page editor, Draft audits the page you are editing and Published loads the public page as an anonymous visitor and maps results back to your fragments. From the Page Tree, one button scans every page, in light and dark, stores scores, deltas and findings in site-scoped Objects, and shows each page's score next to its name. It also checks content where it is written: the CMS content editor, Web Content and Blogs. The HTML of every rich text field is audited for missing alternative text, heading structure, vague or repeated link texts and more, and in the CMS a site can block publishing while critical issues remain. Content checks go beyond the DOM through Liferay APIs: missing translations, images without alternative text in fragments and Documents and Media, style book token contrast and page titles. Each scanned page records its theme and style book, so design issues reach the design owner. The Accessibility Report fragment shows score, issues by impact, trend, pages, rules, fragments, themes and style books for the whole team. Administrators decide per site what is available with the Accessibility Settings object, and who can run site scans through regular permissions. Everything runs in the author's browser with the author's session: no external service, no telemetry, no browser plugin, no microservice. Requirements: Liferay DXP 2026.Q2 or 2026.Q3 and a current browser. Automated checks find a share of WCAG failures; findings marked needs review show where a person has to look. Documentation: https://github.com/marcoscv-work/liferay-accessibility-scanner
+Accessibility Scanner brings WCAG scanning into Liferay authoring. It runs axe-core with nine rules that understand how Liferay pages are built, so every finding points at the fragment, editable or widget to fix instead of a CSS selector. In the page editor, Draft audits the page you are editing and Published loads the public page as an anonymous visitor and maps results back to your fragments. From the Page Tree, one button scans every page, in light and dark, stores scores, deltas and findings in site-scoped Objects, and shows each page's score next to its name. It also checks content where it is written: the CMS content editor, Web Content and Blogs. The HTML of every rich text field is audited for missing alternative text, heading structure, vague or repeated link texts and more, and in the CMS a site can block publishing while critical issues remain. Content checks go beyond the DOM through Liferay APIs: missing translations, images without alternative text in fragments and Documents and Media, style book token contrast and page titles. Each scanned page records its theme and style book, so design issues reach the design owner. The Accessibility Report fragment shows score, issues by impact, trend, pages, rules, fragments, themes and style books for the whole team. Administrators decide per site what is available with the Accessibility Settings object, and who can run site scans through regular permissions. Everything runs in the author's browser with the author's session: no external service, no telemetry, no browser plugin, no microservice. Requirements: Liferay DXP 2026.Q2 or 2026.Q3 and a current browser. Automated checks find a share of WCAG failures; findings marked needs review show where a person has to look. Documentation: https://marcoscv-work.github.io/liferay-accessibility-scanner/
 
 (1829 characters)
 
@@ -23,9 +23,9 @@ Accessibility Scanner brings WCAG scanning into Liferay authoring. It runs axe-c
 | Field | Value |
 |---|---|
 | App type | Client Extension, "Via Liferay Plugin Packages" |
-| Package | `dist/accessibility-scanner.zip` (globalJS + Objects batch, shared baseURL) once the two zips are merged for publishing; today `dist/accessibility-scanner-editor.zip` and `dist/accessibility-scanner-objects.zip` |
+| Package | `dist/accessibility-scanner.zip` from `npm run build`: one client extension project with the globalJS entry, the Objects batch and the report fragment collection under `static/` |
 | Zip file name | Must equal the CET name so `/o/<cet-name>/` resolves (load-bearing up to 2026.Q2) |
-| Fragment | `dist/accessibility-scanner-fragments.zip`, imported from the Fragments admin (documented in the install guide) |
+| Fragment | Ships inside the package, served at `/o/accessibility-scanner/accessibility-scanner-fragments.zip` for import from the Fragments admin (install guide, section Report) |
 | Compatible versions | Only the rows marked green in the compatibility matrix below |
 
 ## Storefront images (1920×1080 PNG, ten, the wizard maximum; upload one at a time, in this order)
@@ -65,8 +65,8 @@ Free, perpetual, no trial (wizard defaults).
 | Support email (public) | TO CONFIRM |
 | Phone | optional, leave empty |
 | EULA URL | optional, Marketplace default applies |
-| Documentation URL | https://github.com/marcoscv-work/liferay-accessibility-scanner#readme |
-| Install and uninstall guide URL | TO WRITE: deploy the zip, import the fragment collection, propagate, place the report; uninstall removes the client extension and leaves the Objects and their data unless deleted from Objects admin |
+| Documentation URL | https://marcoscv-work.github.io/liferay-accessibility-scanner/ |
+| Install and uninstall guide URL | https://marcoscv-work.github.io/liferay-accessibility-scanner/install.html |
 
 ## Compatibility matrix
 
@@ -86,8 +86,5 @@ Fixes the matrix found: quarterly releases require the `x-csrf-token` header on 
 
 ## Open items before submitting
 
-1. Merge the two client extension zips into one package named after the shared baseURL, or declare both packages.
-2. Fill in publisher website and support email.
-3. Write the install and uninstall guide page.
-4. Compatibility: done for 2026.Q2 and 2026.Q3 (see the matrix).
-5. Review the six storefront images and the icon in this folder.
+1. Fill in publisher website and support email.
+2. Compatibility of the merged package: rerun on 2026.Q2 and 2026.Q3 (see the matrix).

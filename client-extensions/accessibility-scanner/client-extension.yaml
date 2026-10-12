@@ -1,0 +1,18 @@
+assemble:
+    -   from: build/static
+        into: static
+    -   from: batch
+        into: batch
+    -   from: ../../dist/accessibility-scanner-fragments.zip
+        into: static
+accessibility-scanner:
+    description: Live WCAG analysis inside the Liferay page editor, the Page Tree and the content editors. axe-core plus Liferay-aware rules that know fragments, editables and content flows.
+    name: Accessibility Scanner
+    scope: company
+    scriptLocation: bottom
+    type: globalJS
+    url: index.*.js
+accessibility-scanner-objects:
+    description: Liferay Objects that store accessibility scans, scanned pages, findings and per-site settings, scoped by site.
+    name: Accessibility Scanner - Objects
+    type: batch

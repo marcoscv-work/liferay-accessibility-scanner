@@ -43,7 +43,7 @@ if [ "${code}" != "200" ]; then
 fi
 
 echo "[$TAG] deploying the client extensions"
-for zip in dist/accessibility-scanner-editor.zip dist/accessibility-scanner-objects.zip; do
+for zip in dist/accessibility-scanner.zip; do
 	docker cp "${zip}" "${NAME}:/opt/liferay/deploy/" >/dev/null
 done
 docker exec -u root "${NAME}" chown -R liferay:liferay /opt/liferay/deploy >/dev/null 2>&1

@@ -58,6 +58,7 @@ function lcp(id) {
 
 const RESERVED = new Set(['assemble', 'runtime']);
 const COMMON_KEYS = new Set(['description', 'name', 'sourceCodeURL', 'type']);
+const NO_CONFIG_TYPES = new Set(['batch', 'siteInitializer']);
 
 function hashify(file) {
 	const content = fs.readFileSync(file);
@@ -160,19 +161,32 @@ async function buildOne(name) {
 	const config = {};
 	const projectId = name.replace(/[^a-z0-9]/gi, '').toLowerCase();
 
-	for (const [id, cx] of cxEntries) {
-		const builtFiles = await bundle(cxDir);
-		const buildDir = path.join(cxDir, 'build', 'static');
-		if (fs.existsSync(buildDir)) {
-			fs.cpSync(buildDir, path.join(stage, 'static'), {recursive: true});
+	const builtFiles = await bundle(cxDir);
+	const buildDir = path.join(cxDir, 'build', 'static');
+	if (fs.existsSync(buildDir)) {
+		fs.cpSync(buildDir, path.join(stage, 'static'), {recursive: true});
+	}
+	for (const step of doc.assemble || []) {
+		const from = path.join(cxDir, step.from);
+		if (!fs.existsSync(from) || step.from === 'build/static') {
+			continue;
 		}
-		for (const step of doc.assemble || []) {
-			const from = path.join(cxDir, step.from);
-			if (fs.existsSync(from) && step.from !== 'build/static') {
-				fs.cpSync(from, path.join(stage, step.into || 'static'), {
-					recursive: true,
-				});
-			}
+		const into = path.join(stage, step.into || 'static');
+		if (fs.statSync(from).isFile()) {
+			fs.mkdirSync(into, {recursive: true});
+			fs.copyFileSync(from, path.join(into, path.basename(from)));
+		}
+		else {
+			fs.cpSync(from, into, {recursive: true});
+		}
+	}
+
+	for (const [id, cx] of cxEntries) {
+		// Batch and site initializer entries have no CET configuration: the
+		// portal imports them from the WEB-INF header alone, and a CET entry
+		// of type batch only logs "Unknown type batch".
+		if (NO_CONFIG_TYPES.has(cx.type)) {
+			continue;
 		}
 		config[
 			`com.liferay.client.extension.type.configuration.CETConfiguration~${id}`
@@ -235,6 +249,8 @@ async function buildOne(name) {
 
 async function buildAll() {
 	fs.mkdirSync(DIST, {recursive: true});
+	// The fragment collection ships inside the client extension (assemble step).
+	execSync('node scripts/build-fragments.mjs', {cwd: ROOT, stdio: 'inherit'});
 	for (const name of fs.readdirSync(CX_DIR)) {
 		await buildOne(name);
 	}

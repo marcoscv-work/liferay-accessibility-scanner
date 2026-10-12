@@ -10,7 +10,7 @@ set -euo pipefail
 LIFERAY_URL="${LIFERAY_URL:-http://localhost:8080}"
 LIFERAY_AUTH="${LIFERAY_AUTH:-test@liferay.com:test}"
 
-BATCH="$(dirname "$0")/../client-extensions/accessibility-scanner-objects/batch/object-definition.batch-engine-data.json"
+BATCH="$(dirname "$0")/../client-extensions/accessibility-scanner/batch/object-definition.batch-engine-data.json"
 
 python3 - "${BATCH}" <<'PY' | while IFS= read -r line; do
 import json, sys

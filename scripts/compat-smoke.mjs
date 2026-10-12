@@ -167,13 +167,18 @@ const env = await page.evaluate(() => ({
 
 await check('globalJS loader on rendered pages', async () => {
 	await page.goto(`${base}/web/guest`);
-	const src = await page.evaluate(() => [...document.scripts].map((s) => s.src).find((s) => /\/o\/accessibility-scanner-editor\//.test(s)));
+	const src = await page.evaluate(() => [...document.scripts].map((s) => s.src).find((s) => /\/o\/accessibility-scanner\//.test(s)));
 	if (!src) {
-		throw new Error('no script from /o/accessibility-scanner-editor/ on the page');
+		throw new Error('no script from /o/accessibility-scanner/ on the page');
 	}
 	const status = await page.evaluate(async (url) => (await fetch(url)).status, src);
 	if (status !== 200) {
 		throw new Error(`loader returned ${status}`);
+	}
+	// The report fragment collection ships inside the package for download.
+	const fragments = await page.evaluate(async () => (await fetch('/o/accessibility-scanner/accessibility-scanner-fragments.zip')).status);
+	if (fragments !== 200) {
+		throw new Error(`bundled fragment collection returned ${fragments}`);
 	}
 	return new URL(src).pathname;
 });

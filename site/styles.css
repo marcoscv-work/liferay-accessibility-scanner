@@ -1291,3 +1291,60 @@ ul {
 		grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
 	}
 }
+
+/* Install guide */
+.guide-page h1 {
+	font-size: clamp(2rem, 4vw, 2.75rem);
+}
+
+.guide {
+	max-width: 46rem;
+}
+
+.guide h2 {
+	font-size: 1.5rem;
+	margin-block: var(--space-7) var(--space-4);
+	scroll-margin-top: 6rem;
+}
+
+.guide h2:first-child {
+	margin-top: 0;
+}
+
+.guide p,
+.guide li {
+	font-size: 1.0625rem;
+	line-height: 1.65;
+}
+
+.guide ol,
+.guide ul {
+	display: grid;
+	gap: var(--space-3);
+	margin-block: 0 var(--space-5);
+	padding-left: 1.5rem;
+}
+
+.guide ul {
+	list-style: disc;
+}
+
+.guide li ul {
+	gap: var(--space-2);
+	margin-block: var(--space-3) 0;
+}
+
+.guide li::marker {
+	color: var(--accent-strong);
+	font-weight: 600;
+}
+
+.guide code {
+	overflow-wrap: anywhere;
+}
+
+.guide a {
+	color: var(--accent-strong);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}

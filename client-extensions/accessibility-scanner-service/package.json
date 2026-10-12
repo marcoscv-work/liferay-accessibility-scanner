@@ -5,7 +5,7 @@
 	"description": "Site-wide accessibility scans for Liferay: Playwright + axe-core + Liferay rules, results stored in Liferay Objects",
 	"type": "module",
 	"scripts": {
-		"build": "esbuild ../accessibility-scanner-editor/src/rules/index.js --bundle --format=iife --global-name=LfrAccessibilityRules --outfile=build/rules.js && esbuild ../accessibility-scanner-editor/src/liferay-context.js --bundle --format=iife --global-name=LfrAccessibilityContext --outfile=build/context.js",
+		"build": "esbuild ../accessibility-scanner/src/rules/index.js --bundle --format=iife --global-name=LfrAccessibilityRules --outfile=build/rules.js && esbuild ../accessibility-scanner/src/liferay-context.js --bundle --format=iife --global-name=LfrAccessibilityContext --outfile=build/context.js",
 		"start": "node src/server.js",
 		"scan": "node src/cli.js"
 	},
