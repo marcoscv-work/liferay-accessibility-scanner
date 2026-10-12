@@ -16,9 +16,16 @@ function text(el) {
 /** Label of the form field that wraps `element`, in the DDM, CMS and taglib layouts. */
 function fieldLabel(element, fallback) {
 	const wrapper = element?.closest?.('.ddm-field, .ddm-field-container, .rich-text-input, .form-group, [data-field-name]');
-	const label =
+	let label =
 		wrapper?.querySelector?.(':scope > label, :scope > .form-group > label, label.control-label, .ddm-label, legend') ||
 		wrapper?.querySelector?.('label');
+	// Taglib editors (the web content description) put the label beside the
+	// editor instead of around it: look for it on the closest ancestors.
+	let node = element;
+	for (let i = 0; i < 6 && node && !text(label); i++) {
+		node = node.parentElement;
+		label = node?.querySelector?.(':scope > label, :scope > .control-label, :scope > legend');
+	}
 	return text(label) || wrapper?.dataset?.fieldName || fallback;
 }
 
