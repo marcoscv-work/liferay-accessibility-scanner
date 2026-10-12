@@ -132,7 +132,7 @@ CMS spaces hold instance-wide content, so the CMS reads the settings of the **Gl
 
 ## Brand
 
-`brand/` holds the logo: `logo-mark.svg` (orange rounded square with a magnifier over the accessibility figure; the Marketplace icon and the site favicon), `logo-horizontal.svg` and `logo-horizontal-dark.svg` (mark plus the name), and PNG exports. Fonts in the wordmark: Lexend Bold and Source Sans 3 SemiBold.
+`brand/` holds the logo: `logo-mark.svg` (orange gradient rounded square with the accessibility figure inside viewfinder corners, flat rounded shapes in the style of the author's other Marketplace app; the Marketplace icon and the site favicon), `logo-horizontal.svg` and `logo-horizontal-dark.svg` (mark plus the name), and PNG exports. Fonts in the wordmark: Lexend Bold and Source Sans 3 SemiBold.
 
 ## Product site
 
