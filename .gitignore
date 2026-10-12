@@ -1,0 +1,8 @@
+node_modules/
+dist/
+client-extensions/*/build/
+.DS_Store
+
+# Local design tooling, not part of the product
+.claude/
+skills-lock.json

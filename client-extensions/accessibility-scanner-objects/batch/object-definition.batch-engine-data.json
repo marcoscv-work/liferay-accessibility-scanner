@@ -1,0 +1,851 @@
+{
+	"configuration": {
+		"className": "com.liferay.object.admin.rest.dto.v1_0.ObjectDefinition",
+		"parameters": {
+			"containsHeaders": "true",
+			"createStrategy": "UPSERT",
+			"importStrategy": "ON_ERROR_FAIL",
+			"updateStrategy": "UPDATE"
+		},
+		"taskItemDelegateName": "DEFAULT"
+	},
+	"items": [
+		{
+			"accountEntryRestricted": false,
+			"active": true,
+			"enableCategorization": false,
+			"enableComments": false,
+			"enableLocalization": false,
+			"enableObjectEntryHistory": true,
+			"externalReferenceCode": "ACCESSIBILITY_FINDING",
+			"label": {
+				"en_US": "Accessibility Finding",
+				"es_ES": "Hallazgo de accesibilidad"
+			},
+			"name": "AccessibilityFinding",
+			"objectActions": [],
+			"objectFields": [
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_RULEID",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Rule",
+						"es_ES": "Regla"
+					},
+					"name": "ruleId",
+					"objectFieldSettings": [],
+					"required": true,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_SOURCE",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Source",
+						"es_ES": "Fuente"
+					},
+					"name": "source",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_IMPACT",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Impact",
+						"es_ES": "Impacto"
+					},
+					"name": "impact",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_WCAG",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "WCAG",
+						"es_ES": "WCAG"
+					},
+					"name": "wcag",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_HELP",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Summary",
+						"es_ES": "Resumen"
+					},
+					"name": "help",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_HELPURL",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Help URL",
+						"es_ES": "URL de ayuda"
+					},
+					"name": "helpUrl",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_SELECTOR",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Selector",
+						"es_ES": "Selector"
+					},
+					"name": "selector",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "Clob",
+					"businessType": "LongText",
+					"externalReferenceCode": "ACCESSIBILITY_HTML",
+					"indexed": false,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "HTML",
+						"es_ES": "HTML"
+					},
+					"name": "html",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Clob"
+				},
+				{
+					"DBType": "Clob",
+					"businessType": "LongText",
+					"externalReferenceCode": "ACCESSIBILITY_MESSAGE",
+					"indexed": false,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Message",
+						"es_ES": "Mensaje"
+					},
+					"name": "message",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Clob"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_FRAGMENTNAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Fragment",
+						"es_ES": "Fragmento"
+					},
+					"name": "fragmentName",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_ITEMID",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Layout Item ID",
+						"es_ES": "ID del elemento"
+					},
+					"name": "itemId",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_EDITABLEID",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Editable",
+						"es_ES": "Editable"
+					},
+					"name": "editableId",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_PORTLETID",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Widget",
+						"es_ES": "Widget"
+					},
+					"name": "portletId",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "Boolean",
+					"businessType": "Boolean",
+					"externalReferenceCode": "ACCESSIBILITY_NEEDSREVIEW",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Needs Review",
+						"es_ES": "Por revisar"
+					},
+					"name": "needsReview",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Boolean"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_FINDINGSTATUS",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Status",
+						"es_ES": "Estado"
+					},
+					"name": "findingStatus",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				}
+			],
+			"objectLayouts": [],
+			"objectRelationships": [],
+			"objectViews": [],
+			"panelCategoryKey": "site_administration.content",
+			"parameterRequired": false,
+			"pluralLabel": {
+				"en_US": "Accessibility Findings",
+				"es_ES": "Hallazgos de accesibilidad"
+			},
+			"portlet": true,
+			"scope": "site",
+			"status": {
+				"code": 0
+			},
+			"system": false,
+			"titleObjectFieldName": "ruleId"
+		},
+		{
+			"accountEntryRestricted": false,
+			"active": true,
+			"enableCategorization": false,
+			"enableComments": false,
+			"enableLocalization": false,
+			"enableObjectEntryHistory": true,
+			"externalReferenceCode": "ACCESSIBILITY_PAGE",
+			"label": {
+				"en_US": "Scanned Page",
+				"es_ES": "Página escaneada"
+			},
+			"name": "AccessibilityPage",
+			"objectActions": [],
+			"objectFields": [
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_PAGETITLE",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Title",
+						"es_ES": "Título"
+					},
+					"name": "pageTitle",
+					"objectFieldSettings": [],
+					"required": true,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_THEMENAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Theme",
+						"es_ES": "Tema"
+					},
+					"name": "themeName",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_STYLEBOOKNAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Style book",
+						"es_ES": "Style book"
+					},
+					"name": "styleBookName",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_URL",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "URL",
+						"es_ES": "URL"
+					},
+					"name": "url",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_PLID",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "PLID",
+						"es_ES": "PLID"
+					},
+					"name": "plid",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_FRIENDLYURL",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Friendly URL",
+						"es_ES": "URL amigable"
+					},
+					"name": "friendlyUrl",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_LANGUAGEID",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Language",
+						"es_ES": "Idioma"
+					},
+					"name": "languageId",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_EXPERIENCE",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Experience",
+						"es_ES": "Experiencia"
+					},
+					"name": "experience",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "Integer",
+					"businessType": "Integer",
+					"externalReferenceCode": "ACCESSIBILITY_VIOLATIONS",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Violations",
+						"es_ES": "Problemas"
+					},
+					"name": "violations",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Integer"
+				},
+				{
+					"DBType": "Integer",
+					"businessType": "Integer",
+					"externalReferenceCode": "ACCESSIBILITY_NEEDSREVIEW",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Needs Review",
+						"es_ES": "Por revisar"
+					},
+					"name": "needsReview",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Integer"
+				},
+				{
+					"DBType": "Integer",
+					"businessType": "Integer",
+					"externalReferenceCode": "ACCESSIBILITY_SCORE",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Score",
+						"es_ES": "Puntuación"
+					},
+					"name": "score",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Integer"
+				}
+			],
+			"objectLayouts": [],
+			"objectRelationships": [
+				{
+					"deletionType": "cascade",
+					"externalReferenceCode": "ACCESSIBILITY_PAGE_FINDINGS",
+					"label": {
+						"en_US": "Findings",
+						"es_ES": "Hallazgos"
+					},
+					"name": "accessibilityPageFindings",
+					"objectDefinitionExternalReferenceCode2": "ACCESSIBILITY_FINDING",
+					"objectDefinitionName2": "AccessibilityFinding",
+					"type": "oneToMany"
+				}
+			],
+			"objectViews": [],
+			"panelCategoryKey": "site_administration.content",
+			"parameterRequired": false,
+			"pluralLabel": {
+				"en_US": "Scanned Pages",
+				"es_ES": "Páginas escaneadas"
+			},
+			"portlet": true,
+			"scope": "site",
+			"status": {
+				"code": 0
+			},
+			"system": false,
+			"titleObjectFieldName": "pageTitle"
+		},
+		{
+			"accountEntryRestricted": false,
+			"active": true,
+			"enableCategorization": false,
+			"enableComments": false,
+			"enableLocalization": false,
+			"enableObjectEntryHistory": true,
+			"externalReferenceCode": "ACCESSIBILITY_SCAN",
+			"label": {
+				"en_US": "Accessibility Scan",
+				"es_ES": "Escaneo de accesibilidad"
+			},
+			"name": "AccessibilityScan",
+			"objectActions": [],
+			"objectFields": [
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_SITENAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Site",
+						"es_ES": "Sitio"
+					},
+					"name": "siteName",
+					"objectFieldSettings": [],
+					"required": true,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_SITEGROUPID",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Group ID",
+						"es_ES": "ID del sitio"
+					},
+					"name": "siteGroupId",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_TRIGGER",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Trigger",
+						"es_ES": "Origen"
+					},
+					"name": "trigger",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_LANGUAGEID",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Language",
+						"es_ES": "Idioma"
+					},
+					"name": "languageId",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_VIEWPORT",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Viewport",
+						"es_ES": "Vista"
+					},
+					"name": "viewport",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "DateTime",
+					"businessType": "DateTime",
+					"externalReferenceCode": "ACCESSIBILITY_STARTDATE",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Start Date",
+						"es_ES": "Inicio"
+					},
+					"name": "startDate",
+					"objectFieldSettings": [
+						{
+							"name": "timeStorage",
+							"value": "convertToUTC"
+						}
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "DateTime"
+				},
+				{
+					"DBType": "DateTime",
+					"businessType": "DateTime",
+					"externalReferenceCode": "ACCESSIBILITY_ENDDATE",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "End Date",
+						"es_ES": "Fin"
+					},
+					"name": "endDate",
+					"objectFieldSettings": [
+						{
+							"name": "timeStorage",
+							"value": "convertToUTC"
+						}
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "DateTime"
+				},
+				{
+					"DBType": "Integer",
+					"businessType": "Integer",
+					"externalReferenceCode": "ACCESSIBILITY_PAGESSCANNED",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Pages Scanned",
+						"es_ES": "Páginas escaneadas"
+					},
+					"name": "pagesScanned",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Integer"
+				},
+				{
+					"DBType": "Integer",
+					"businessType": "Integer",
+					"externalReferenceCode": "ACCESSIBILITY_VIOLATIONS",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Violations",
+						"es_ES": "Problemas"
+					},
+					"name": "violations",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Integer"
+				},
+				{
+					"DBType": "Integer",
+					"businessType": "Integer",
+					"externalReferenceCode": "ACCESSIBILITY_NEEDSREVIEW",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Needs Review",
+						"es_ES": "Por revisar"
+					},
+					"name": "needsReview",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Integer"
+				},
+				{
+					"DBType": "Integer",
+					"businessType": "Integer",
+					"externalReferenceCode": "ACCESSIBILITY_SCORE",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Score",
+						"es_ES": "Puntuación"
+					},
+					"name": "score",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Integer"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_SCANSTATUS",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Status",
+						"es_ES": "Estado"
+					},
+					"name": "scanStatus",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "ACCESSIBILITY_ENGINEVERSION",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Engine Version",
+						"es_ES": "Motor"
+					},
+					"name": "engineVersion",
+					"objectFieldSettings": [],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				}
+			],
+			"objectLayouts": [],
+			"objectRelationships": [
+				{
+					"deletionType": "cascade",
+					"externalReferenceCode": "ACCESSIBILITY_SCAN_PAGES",
+					"label": {
+						"en_US": "Pages",
+						"es_ES": "Páginas"
+					},
+					"name": "accessibilityScanPages",
+					"objectDefinitionExternalReferenceCode2": "ACCESSIBILITY_PAGE",
+					"objectDefinitionName2": "AccessibilityPage",
+					"type": "oneToMany"
+				}
+			],
+			"objectViews": [],
+			"panelCategoryKey": "site_administration.content",
+			"parameterRequired": false,
+			"pluralLabel": {
+				"en_US": "Accessibility Scans",
+				"es_ES": "Escaneos de accesibilidad"
+			},
+			"portlet": true,
+			"scope": "site",
+			"status": {
+				"code": 0
+			},
+			"system": false,
+			"titleObjectFieldName": "siteName"
+		}
+	]
+}

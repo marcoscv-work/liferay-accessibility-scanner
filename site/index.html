@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Accessibility Scanner for Liferay</title>
+	<meta name="description" content="WCAG scanning that speaks Liferay: axe-core plus Liferay-aware rules inside the page editor, whole-site scans stored in Objects, and a report fragment for your team. A client extension for Liferay DXP.">
+	<meta property="og:title" content="Accessibility Scanner for Liferay">
+	<meta property="og:description" content="Accessibility findings that point at the fragment, the content and the design, not at a CSS selector. Inside the Liferay page editor.">
+	<meta property="og:type" content="website">
+	<meta property="og:image" content="assets/shots/framed/hero-editor.png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="styles.css">
+	<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ea580c'/%3E%3Ccircle cx='16' cy='8.5' r='2.6' fill='%23fff'/%3E%3Cpath d='M8 12.5h16l-5.6 1.6v5.2l2.4 6.2-2.3.9L16 20.3l-2.5 6.1-2.3-.9 2.4-6.2v-5.2z' fill='%23fff'/%3E%3C/svg%3E">
+</head>
+<body>
+	<a class="skip-link" href="#main">Skip to main content</a>
+
+	<header class="site-header">
+		<div class="container">
+			<a class="brand" href="#top" aria-label="Accessibility Scanner for Liferay, home">
+				<span class="brand-mark" aria-hidden="true">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.8" fill="currentColor" stroke="none"/><path d="M5 8.5h14M12 8.5v5l-2.5 6M12 13.5l2.5 6"/></svg>
+				</span>
+				<span>Accessibility Scanner<small>for Liferay DXP</small></span>
+			</a>
+			<button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Menu">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+			</button>
+			<nav class="site-nav" id="site-nav" aria-label="Primary">
+				<ul>
+					<li><a href="#why">Why</a></li>
+					<li><a href="#editor">In the editor</a></li>
+					<li><a href="#site-scans">Site scans</a></li>
+					<li><a href="#report">Report</a></li>
+					<li><a href="#rules">Rules</a></li>
+					<li><a href="#how">How it works</a></li>
+				</ul>
+			</nav>
+			<a class="btn btn-primary btn-sm header-cta" href="https://github.com/marcoscv-work/liferay-accessibility-scanner">Get the extension</a>
+		</div>
+	</header>
+
+	<main id="main">
+		<!-- Hero -->
+		<section class="hero" id="top" aria-labelledby="hero-title">
+			<div class="container">
+				<div class="hero-copy">
+					<p class="eyebrow">Client extension for Liferay DXP</p>
+					<h1 id="hero-title">Accessibility findings that <em>speak Liferay</em></h1>
+					<p class="lead">axe-core plus rules that understand how Liferay pages are built. Every issue points at the fragment, the content or the style book to fix, right inside the page editor. Scan the whole site, keep the history in Objects, and share a report your team can read.</p>
+					<div class="hero-actions">
+						<a class="btn btn-accent" href="#how">
+							See how it works
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+						</a>
+						<a class="btn btn-outline" href="https://github.com/marcoscv-work/liferay-accessibility-scanner">View on GitHub</a>
+					</div>
+					<ul class="hero-meta">
+						<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>WCAG 2.2 with axe-core 4.14</li>
+						<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>No microservices, no browser plugin</li>
+						<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Multisite ready</li>
+					</ul>
+				</div>
+				<div class="hero-visual">
+					<img class="framed framed-hero" src="assets/shots/framed/hero-editor.webp" width="3200" height="2000" alt="The Liferay page editor with the Accessibility drawer zoomed in front: the Draft tab lists 13 issues in 4 fragments, grouped by rule, each with an impact sticker, the fragment and editable it belongs to, and buttons to highlight or select it in the editor." fetchpriority="high">
+					<div class="hero-callout" aria-hidden="true">
+						<strong>13 issues</strong>
+						in 4 fragments, each one mapped to the fragment and editable to fix
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Stats strip -->
+		<section class="stats" aria-label="At a glance">
+			<div class="container">
+				<div class="stat"><strong>axe + 9 rules</strong><span>axe-core 4.14, nine Liferay-aware rules and five content checks</span></div>
+				<div class="stat"><strong>3 scopes</strong><span>Draft in the editor, published page as a visitor, whole site</span></div>
+				<div class="stat"><strong>Light and dark</strong><span>A pass per color scheme when the theme defines one</span></div>
+				<div class="stat"><strong>Zero servers</strong><span>Runs in the browser, stores in Objects, ships as one zip</span></div>
+			</div>
+		</section>
+
+		<!-- Why -->
+		<section class="section" id="why" aria-labelledby="why-title">
+			<div class="container">
+				<div class="section-head reveal">
+					<p class="eyebrow">Why not just axe DevTools?</p>
+					<h2 id="why-title">Same engine. Completely different answer.</h2>
+					<p>A browser extension tells you a CSS selector is wrong. Content authors cannot act on that. The scanner translates every finding into Liferay terms, audits what the browser cannot see, and remembers the results.</p>
+				</div>
+				<div class="compare reveal">
+					<table>
+						<caption class="visually-hidden">Comparison between axe in browser DevTools and Accessibility Scanner for Liferay</caption>
+						<thead>
+							<tr>
+								<th scope="col">Capability</th>
+								<th scope="col">axe in DevTools</th>
+								<th scope="col">Accessibility Scanner</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">Where the issue is</th>
+								<td data-label="axe in DevTools"><span class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>A CSS selector</span></td>
+								<td data-label="Accessibility Scanner"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Fragment, editable, widget. Highlight or select it in the editor</span></td>
+							</tr>
+							<tr>
+								<th scope="row">Liferay authoring mistakes</th>
+								<td data-label="axe in DevTools"><span class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Not covered</span></td>
+								<td data-label="Accessibility Scanner"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Placeholder texts, links without destination, file names as alt, stacked h1s and more</span></td>
+							</tr>
+							<tr>
+								<th scope="row">Content and design model</th>
+								<td data-label="axe in DevTools"><span class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Only the rendered DOM</span></td>
+								<td data-label="Accessibility Scanner"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Missing translations, library images without description, style book token contrast, page titles</span></td>
+							</tr>
+							<tr>
+								<th scope="row">Scope</th>
+								<td data-label="axe in DevTools"><span class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>One page, one tab, one user</span></td>
+								<td data-label="Accessibility Scanner"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Draft, published page as an anonymous visitor, and the whole site in light and dark</span></td>
+							</tr>
+							<tr>
+								<th scope="row">Memory</th>
+								<td data-label="axe in DevTools"><span class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Gone when the tab closes</span></td>
+								<td data-label="Accessibility Scanner"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Scans, pages and findings in Objects: score, trend, delta, stale-scan alerts and a report fragment</span></td>
+							</tr>
+							<tr>
+								<th scope="row">Who fixes it</th>
+								<td data-label="axe in DevTools"><span class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Unclear</span></td>
+								<td data-label="Accessibility Scanner"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Aggregated by rule, fragment, theme and style book, so content, fragment and design owners each see their part</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+
+		<!-- Feature showcase -->
+		<section class="section section-muted" id="editor" aria-labelledby="features-title">
+			<div class="container">
+				<div class="section-head reveal">
+					<p class="eyebrow">Product tour</p>
+					<h2 id="features-title">Built into the place where pages are made</h2>
+					<p>One button next to the viewport switches in the page editor. A drawer the size of the configuration panel. Three tabs: Draft, Published, Site.</p>
+				</div>
+
+				<article class="feature reveal">
+					<div class="feature-copy">
+						<h3>Draft tab: live feedback while you author</h3>
+						<p class="muted">Scan the page you are editing. Findings are grouped by rule, with a compact impact sticker, the WCAG criterion, and the fragment and editable they belong to. Highlight the element on the canvas or select it to open its configuration.</p>
+						<ul class="feature-list">
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Grouped by rule</strong>, filterable by impact, each with a link to the rule documentation.</span></li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>One-line element summary</strong> instead of raw HTML: tag, alt, href, role and the attributes that matter.</span></li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Page-level content checks</strong> folded in: translations, image alt text, style book contrast.</span></li>
+						</ul>
+					</div>
+					<div class="shot-panel">
+						<img class="framed" src="assets/shots/framed/panel-draft.webp" width="1800" height="2480" alt="The Accessibility drawer on its Draft tab: 13 issues in 4 fragments, a filter set to All, and the rule Links must have discernible text expanded with its findings on the USWDS footer, each with highlight and select buttons." loading="lazy">
+					</div>
+				</article>
+
+				<article class="feature feature-reverse reveal">
+					<div class="feature-copy">
+						<h3>Published tab: audit what visitors actually get</h3>
+						<p class="muted">The editor DOM is not the page. It adds classes, hides content from assistive technology and renders toppers over your fragments. The Published tab loads the public URL in a hidden frame, runs the same scanner there and maps the results back to your draft fragments.</p>
+						<ul class="feature-list">
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Same origin, same session</strong>, no copies of your content leave the portal.</span></li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Findings mapped by layout item id</strong>, so you still jump to the right fragment in the editor.</span></li>
+						</ul>
+					</div>
+					<div class="shot-panel">
+						<img class="framed" src="assets/shots/framed/panel-published.webp" width="1800" height="2480" alt="The Accessibility drawer on its Published tab, listing the issues found on the public version of the page as an anonymous visitor would get it." loading="lazy">
+					</div>
+				</article>
+
+				<article class="feature reveal" id="site-scans">
+					<div class="feature-copy">
+						<h3>Site tab: the whole site, as an anonymous visitor</h3>
+						<p class="muted">Every public and private page is fetched without credentials and audited in your browser, light and dark when the theme defines a dark scheme. Results go to site-scoped Objects with a score per page, so the next scan shows the delta.</p>
+						<ul class="feature-list">
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Theme-aware color schemes.</strong> The dark pass only runs on pages whose theme actually defines one.</span></li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Theme and style book recorded per page</strong>, so design issues are attributed to the design.</span></li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Progress, cancel and a stale-scan notice</strong> after 14 days without scanning.</span></li>
+						</ul>
+					</div>
+					<div class="shot-panel">
+						<img class="framed" src="assets/shots/framed/panel-site.webp" width="1800" height="2480" alt="The Accessibility drawer on its Site tab: last scan with a score of 47 out of 100, 95 violations on 8 pages, a note that the Liferay USWDS theme defines a dark scheme, a color scheme selector set to light and dark, and a Scan site now button." loading="lazy">
+					</div>
+				</article>
+			</div>
+		</section>
+
+		<!-- Report -->
+		<section class="section" id="report" aria-labelledby="report-title">
+			<div class="container">
+				<div class="section-head reveal">
+					<p class="eyebrow">Report fragment</p>
+					<h2 id="report-title">A report anyone on the team can read</h2>
+					<p>Drop the Accessibility Report fragment on any page of the site. It reads the scans from the Objects and renders score, issues by impact, trend, pages, rules, fragments, themes and style books. Switch between light and dark results. Responsive, Clay-styled, no extra CSS framework.</p>
+				</div>
+				<div class="shot-duo reveal">
+					<img class="framed" src="assets/shots/framed/report-desktop.webp" width="3200" height="2200" alt="The Accessibility Report fragment: a site score donut at 72 of 100, a donut of 97 issues by impact, a score trend bar chart, and ranked lists of pages with most issues, findings by rule, findings by fragment, and themes and style books." loading="lazy">
+					<img class="framed" src="assets/shots/framed/report-mobile.webp" width="1520" height="2480" alt="The same report on a phone, with the score card stacked above the other cards." loading="lazy">
+				</div>
+			</div>
+		</section>
+
+		<!-- Rules -->
+		<section class="section section-dark" id="rules" aria-labelledby="rules-title">
+			<div class="container">
+				<div class="section-head reveal">
+					<p class="eyebrow">Liferay-aware rules</p>
+					<h2 id="rules-title">Nine rules axe will never ship</h2>
+					<p>They run as custom axe rules under the <code>liferay</code> tag, next to the standard WCAG ruleset, and catch the mistakes that happen specifically when pages are assembled from fragments.</p>
+				</div>
+				<div class="grid grid-3 reveal">
+					<div class="card rule" style="background: var(--bg-dark-2); border-color: #334155;">
+						<span class="rule-id">liferay-placeholder-text</span>
+						<h3>Placeholder text left in the page</h3>
+						<p>"Heading Example", "Go Somewhere", card samples: the fragment defaults nobody changed.</p>
+						<span class="rule-tag">WCAG 1.3.1 · serious</span>
+					</div>
+					<div class="card rule" style="background: var(--bg-dark-2); border-color: #334155;">
+						<span class="rule-id">liferay-link-destination</span>
+						<h3>Link without destination</h3>
+						<p>Link and button fragments published with no URL configured.</p>
+						<span class="rule-tag">WCAG 2.4.4 · serious</span>
+					</div>
+					<div class="card rule" style="background: var(--bg-dark-2); border-color: #334155;">
+						<span class="rule-id">liferay-single-h1</span>
+						<h3>Multiple h1 headings</h3>
+						<p>Stacked heading fragments that all render as h1, breaking the page outline.</p>
+						<span class="rule-tag">WCAG 1.3.1 · moderate</span>
+					</div>
+					<div class="card rule" style="background: var(--bg-dark-2); border-color: #334155;">
+						<span class="rule-id">liferay-generic-link-text</span>
+						<h3>Generic link or button text</h3>
+						<p>"Read more", "Click here", "Learn more" without context for screen reader users.</p>
+						<span class="rule-tag">WCAG 2.4.4 · serious</span>
+					</div>
+					<div class="card rule" style="background: var(--bg-dark-2); border-color: #334155;">
+						<span class="rule-id">liferay-duplicate-link-text</span>
+						<h3>Same text, different destinations</h3>
+						<p>Links that read the same but go to different places, typical in card grids.</p>
+						<span class="rule-tag">WCAG 2.4.4 · moderate</span>
+					</div>
+					<div class="card rule" style="background: var(--bg-dark-2); border-color: #334155;">
+						<span class="rule-id">liferay-new-tab-warning</span>
+						<h3>New tab without warning</h3>
+						<p>Links that open a new tab with no visible or accessible indication.</p>
+						<span class="rule-tag">WCAG 3.2.5 · minor</span>
+					</div>
+					<div class="card rule" style="background: var(--bg-dark-2); border-color: #334155;">
+						<span class="rule-id">liferay-alt-filename</span>
+						<h3>Alt text is a file name</h3>
+						<p>Images whose alternative text is "photo_1234.jpg", the default from the upload.</p>
+						<span class="rule-tag">WCAG 1.1.1 · serious</span>
+					</div>
+					<div class="card rule" style="background: var(--bg-dark-2); border-color: #334155;">
+						<span class="rule-id">liferay-video-captions</span>
+						<h3>Video without captions</h3>
+						<p>Embedded and external videos with no caption track to review.</p>
+						<span class="rule-tag">WCAG 1.2.2 · needs review</span>
+					</div>
+					<div class="card rule" style="background: var(--bg-dark-2); border-color: #334155;">
+						<span class="rule-id">liferay-carousel-autoplay</span>
+						<h3>Carousel that autoplays</h3>
+						<p>Sliders moving on their own without a pause control.</p>
+						<span class="rule-tag">WCAG 2.2.2 · serious</span>
+					</div>
+				</div>
+
+				<h3 style="margin-top: var(--space-8);">Five content checks through Liferay's APIs</h3>
+				<ul class="checks reveal">
+					<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h12M9 3v2m1.1 10.4L7 22m5-7 3 7M4 9c3 4 8 6 12 6m2-5a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/></svg><div><strong>Missing translations</strong><span>Texts not translated into every language the site offers.</span></div></li>
+					<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="m21 15-5-5-9 9"/></svg><div><strong>Image alt unset</strong><span>Image fragments with no alternative text in the page definition.</span></div></li>
+					<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h10l6 6v10a2 2 0 0 1-2 2H4z"/><path d="M14 4v6h6M8 15h8M8 18h5"/></svg><div><strong>Library images without description</strong><span>Documents and Media images in the site and the Global site.</span></div></li>
+					<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg><div><strong>Style book token contrast</strong><span>Body, primary and secondary colors read from the applied style book.</span></div></li>
+					<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h7"/></svg><div><strong>Page titles</strong><span>Empty or duplicated titles across the site's pages.</span></div></li>
+				</ul>
+			</div>
+		</section>
+
+		<!-- How it works -->
+		<section class="section" id="how" aria-labelledby="how-title">
+			<div class="container">
+				<div class="section-head reveal">
+					<p class="eyebrow">How it works</p>
+					<h2 id="how-title">One zip. No servers. Works on every site.</h2>
+					<p>Everything runs in the author's browser with the author's session. The Objects are site-scoped, so each site keeps its own scans and permissions.</p>
+				</div>
+				<ol class="steps reveal">
+					<li class="step">
+						<h3>Deploy the client extension</h3>
+						<p>Drop the zip in your Liferay deploy folder or install it from Marketplace. It brings a global JavaScript and the Accessibility Scan, Page and Finding Objects.</p>
+					</li>
+					<li class="step">
+						<h3>Open any page in the editor</h3>
+						<p>A tiny loader runs on every page and only fetches the scanner when the editor is open. Press the new toolbar button and scan the draft or the published page.</p>
+					</li>
+					<li class="step">
+						<h3>Scan the site, read the report</h3>
+						<p>Run a site scan from the Site tab, then place the Accessibility Report fragment on a page for the team. Rescan whenever you publish.</p>
+					</li>
+				</ol>
+				<div class="ships reveal">
+					<div class="card">
+						<h3>Global JavaScript</h3>
+						<p>The editor panel, the scanner (axe-core and the Liferay rules), the published and site scanners. Clay classes only, served by the portal.</p>
+					</div>
+					<div class="card">
+						<h3>Objects (batch)</h3>
+						<p>Accessibility Scan, Page and Finding, scoped per site, with English and Spanish labels and REST endpoints out of the box.</p>
+					</div>
+					<div class="card">
+						<h3>Report fragment</h3>
+						<p>An importable fragment collection with the configurable Accessibility Report: trend length, pages to list, sections to show.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- FAQ -->
+		<section class="section section-muted" aria-labelledby="faq-title">
+			<div class="container">
+				<div class="section-head reveal">
+					<p class="eyebrow">Questions</p>
+					<h2 id="faq-title">Good to know</h2>
+				</div>
+				<div class="faq reveal">
+					<details>
+						<summary>Does any content leave my portal?</summary>
+						<p>No. Pages are fetched by your browser from your own portal, audited there and stored in your own Objects. There is no external service and no telemetry.</p>
+					</details>
+					<details>
+						<summary>Who can see the report?</summary>
+						<p>Whoever has permission to read the Accessibility Scan Objects on that site. The fragment uses the visitor's session, so a visitor without permission sees a sign-in hint, not the data.</p>
+					</details>
+					<details>
+						<summary>Which Liferay versions?</summary>
+						<p>Liferay DXP quarterly releases with client extensions, Objects and the page editor. The exact tested versions are listed on the Marketplace page and in the repository.</p>
+					</details>
+					<details>
+						<summary>Is a site scan slow?</summary>
+						<p>About two to four seconds per page and color scheme, in your browser. Keep the tab visible while it runs: browsers throttle background tabs and axe depends on timers.</p>
+					</details>
+					<details>
+						<summary>Does it replace a manual audit?</summary>
+						<p>No tool does. Automated checks find a share of WCAG failures; findings marked "needs review" tell you where a person has to look. The scanner makes that person's work shorter and better targeted.</p>
+					</details>
+				</div>
+			</div>
+		</section>
+
+		<!-- CTA -->
+		<section class="cta" aria-labelledby="cta-title">
+			<div class="container">
+				<div>
+					<h2 id="cta-title">Make accessibility part of publishing</h2>
+					<p>Install the extension, open the editor and scan. Your authors will know what to fix before anyone else finds it.</p>
+				</div>
+				<div class="cta-actions">
+					<a class="btn btn-accent" href="https://github.com/marcoscv-work/liferay-accessibility-scanner">Get the extension</a>
+					<a class="btn btn-outline" href="https://github.com/marcoscv-work/liferay-accessibility-scanner/blob/master/docs/rules.md">Read the rules</a>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<div class="container">
+			<p style="margin: 0;">© <span data-year>2026</span> Accessibility Scanner for Liferay. Built with axe-core and Clay. Not an official Liferay product.</p>
+			<ul>
+				<li><a href="https://github.com/marcoscv-work/liferay-accessibility-scanner">GitHub</a></li>
+				<li><a href="https://github.com/marcoscv-work/liferay-accessibility-scanner/blob/master/docs/rules.md">Rule documentation</a></li>
+				<li><a href="https://www.w3.org/WAI/WCAG22/quickref/">WCAG 2.2 quick reference</a></li>
+			</ul>
+		</div>
+	</footer>
+
+	<script src="script.js" defer></script>
+</body>
+</html>

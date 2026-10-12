@@ -1,0 +1,18 @@
+{
+	"name": "liferay-accessibility-scanner",
+	"version": "0.1.0",
+	"private": true,
+	"description": "WCAG analyzer for Liferay DXP: axe-core plus Liferay-aware rules, packaged as client extensions",
+	"type": "module",
+	"scripts": {
+		"build": "node scripts/build.mjs",
+		"deploy": "node scripts/build.mjs --deploy",
+		"watch": "node scripts/build.mjs --deploy --watch",
+		"build:fragments": "node scripts/build-fragments.mjs"
+	},
+	"devDependencies": {
+		"axe-core": "^4.10.0",
+		"esbuild": "^0.25.0",
+		"yaml": "^2.6.0"
+	}
+}

@@ -1,0 +1,22 @@
+accessibility-scanner-service:
+    description: Site-wide accessibility scans as an anonymous visitor (Playwright + axe-core + Liferay rules), stored in the Accessibility Scan Objects.
+    name: Accessibility Scanner - Scan Service
+    type: microservice
+accessibility-scanner-service-oahs:
+    .serviceAddress: localhost:58082
+    .serviceScheme: http
+    name: Accessibility Scanner - OAuth Application Headless Server
+    scopes:
+        -   C_AccessibilityFinding.everything
+        -   C_AccessibilityPage.everything
+        -   C_AccessibilityScan.everything
+        -   Liferay.Headless.Admin.Site.everything
+        -   Liferay.Headless.Admin.User.everything
+    type: oAuthApplicationHeadlessServer
+accessibility-scanner-service-run-scan:
+    allowedObjectDefinitionNames:
+        -   C_AccessibilityScan
+    name: Run Scan
+    oAuth2ApplicationExternalReferenceCode: accessibility-scanner-service-oahs
+    resourcePath: /scan
+    type: objectAction

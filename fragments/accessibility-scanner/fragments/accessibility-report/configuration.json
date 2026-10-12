@@ -1,0 +1,61 @@
+{
+	"fieldSets": [
+		{
+			"fields": [
+				{
+					"dataType": "int",
+					"defaultValue": "6",
+					"label": "Scans in the trend",
+					"name": "trendLength",
+					"type": "text",
+					"typeOptions": {
+						"validation": {
+							"max": 24,
+							"min": 2,
+							"type": "number"
+						}
+					}
+				},
+				{
+					"dataType": "int",
+					"defaultValue": "8",
+					"label": "Pages to list",
+					"name": "pageLimit",
+					"type": "text",
+					"typeOptions": {
+						"validation": {
+							"max": 50,
+							"min": 1,
+							"type": "number"
+						}
+					}
+				},
+				{
+					"defaultValue": true,
+					"label": "Show pages ranking",
+					"name": "showPages",
+					"type": "checkbox"
+				},
+				{
+					"defaultValue": true,
+					"label": "Show findings by rule",
+					"name": "showRules",
+					"type": "checkbox"
+				},
+				{
+					"defaultValue": true,
+					"label": "Show findings by fragment",
+					"name": "showFragments",
+					"type": "checkbox"
+				},
+				{
+					"defaultValue": true,
+					"label": "Show themes and style books",
+					"name": "showDesign",
+					"type": "checkbox"
+				}
+			],
+			"label": "Report"
+		}
+	]
+}

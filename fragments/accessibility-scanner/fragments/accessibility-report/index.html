@@ -1,0 +1,15 @@
+<div class="accessibility-report"
+	data-fragment-namespace="${fragmentEntryLinkNamespace}"
+	data-group-id="${themeDisplay.getScopeGroupId()}"
+	data-page-limit="${configuration.pageLimit}"
+	data-show-design="${configuration.showDesign?string('true', 'false')}"
+	data-show-fragments="${configuration.showFragments?string('true', 'false')}"
+	data-show-pages="${configuration.showPages?string('true', 'false')}"
+	data-show-rules="${configuration.showRules?string('true', 'false')}"
+	data-trend-length="${configuration.trendLength}"
+	data-edit-mode="${((layoutMode!'view') == 'edit')?string('true', 'false')}">
+	<h2 class="accessibility-report__title" data-lfr-editable-id="title" data-lfr-editable-type="text">Accessibility report</h2>
+	<div class="accessibility-report__body" aria-live="polite">
+		<span aria-hidden="true" class="loading-animation loading-animation-sm"></span>
+	</div>
+</div>

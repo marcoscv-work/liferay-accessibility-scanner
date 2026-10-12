@@ -1,0 +1,19 @@
+{
+	"name": "accessibility-scanner-service",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Site-wide accessibility scans for Liferay: Playwright + axe-core + Liferay rules, results stored in Liferay Objects",
+	"type": "module",
+	"scripts": {
+		"build": "esbuild ../accessibility-scanner-editor/src/rules/index.js --bundle --format=iife --global-name=LfrAccessibilityRules --outfile=build/rules.js && esbuild ../accessibility-scanner-editor/src/liferay-context.js --bundle --format=iife --global-name=LfrAccessibilityContext --outfile=build/context.js",
+		"start": "node src/server.js",
+		"scan": "node src/cli.js"
+	},
+	"dependencies": {
+		"axe-core": "^4.10.0",
+		"playwright": "^1.49.0"
+	},
+	"devDependencies": {
+		"esbuild": "^0.25.0"
+	}
+}

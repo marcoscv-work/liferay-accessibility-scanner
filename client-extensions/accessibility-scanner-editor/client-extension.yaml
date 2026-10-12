@@ -1,0 +1,10 @@
+assemble:
+    -   from: build/static
+        into: static
+accessibility-scanner-editor:
+    description: Live WCAG analysis inside the Liferay page editor. axe-core plus Liferay-aware rules that know fragments, editables and content flows.
+    name: Accessibility Scanner - Editor
+    scope: company
+    scriptLocation: bottom
+    type: globalJS
+    url: index.*.js

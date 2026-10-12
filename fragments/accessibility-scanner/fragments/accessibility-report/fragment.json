@@ -1,0 +1,10 @@
+{
+	"cacheable": false,
+	"configurationPath": "configuration.json",
+	"cssPath": "index.css",
+	"htmlPath": "index.html",
+	"icon": "accessibility",
+	"jsPath": "index.js",
+	"name": "Accessibility Report",
+	"type": "component"
+}
