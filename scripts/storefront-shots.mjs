@@ -62,15 +62,35 @@ async function shotWithMargin(handle, file, margin = 48) {
 	await page.screenshot({clip, path: file});
 }
 
-async function shotPanel(name) {
+async function shotPanel(name, park = [1200, 40]) {
 	// Park the pointer so no tooltip shows up in the shot.
-	await page.mouse.move(1200, 40);
+	await page.mouse.move(...park);
 	await sleep(400);
 	const panel = await page.$('.lfr-accessibility-scanner__panel');
 	await shotWithMargin(panel, `${out}/${name}-panel.png`, 32);
 	await page.screenshot({path: `${out}/${name}.png`});
 	console.log('shot', name);
 }
+
+async function setProductMenu(open) {
+	const isOpen = await page.evaluate(() => document.body.classList.contains('product-menu-open') || !!document.querySelector('.lfr-product-menu-panel.open'));
+	if (isOpen !== open && (await page.$('[data-qa-id="productMenu"]'))) {
+		await page.locator('[data-qa-id="productMenu"]').first().click();
+		await sleep(1500);
+	}
+}
+
+const api = (p, init = {}) =>
+	page.evaluate(
+		async ({init, p}) => {
+			const r = await fetch(p, {...init, headers: {'Accept': 'application/json', 'Accept-Language': 'en-US', 'Content-Type': 'application/json', 'x-csrf-token': Liferay.authToken}});
+			return r.ok ? r.json().catch(() => ({})) : {status: r.status};
+		},
+		{init, p}
+	);
+
+await page.goto(`${base}/web/${site}/${editPage}`);
+await setProductMenu(false);
 
 // 1. Draft tab with findings in the page editor.
 await page.goto(`${base}/web/${site}/${editPage}?p_l_mode=edit`);
@@ -110,21 +130,6 @@ await page.evaluate(() => window.__lfrAccessibilityScannerPanel.scanPublished())
 await sleep(15000);
 await shotPanel('editor-published');
 
-// 3. Site view from the Page Tree of the published page, with score stickers.
-await page.goto(`${base}/web/${site}/${editPage}`);
-await page.waitForLoadState('load');
-await sleep(1500);
-if (!(await page.$('.pages-tree'))) {
-	await page.locator('[data-qa-id="productMenu"]').first().click();
-	await sleep(1500);
-	await page.locator('.lfr-product-menu-panel').getByText('Page Tree', {exact: true}).first().click();
-}
-await page.waitForSelector('.lfr-accessibility-scanner__tree-score', {timeout: 30000});
-await page.click('.lfr-accessibility-scanner__tree-button');
-await page.waitForSelector('.lfr-accessibility-scanner__panel:not([hidden]) .lfr-accessibility-scanner__site');
-await sleep(3000);
-await shotPanel('editor-site');
-
 // 4. Report page, desktop and phone.
 await page.goto(`${base}${reportURL}`);
 await sleep(4000);
@@ -146,5 +151,141 @@ await page.evaluate(() => window.scrollBy(0, -16));
 await sleep(600);
 await page.screenshot({path: `${out}/report-mobile.png`});
 console.log('shot report-mobile');
+await page.setViewportSize({height: 1080, width: 1920});
 
+
+// 5. Content editors with realistic content that has typical problems.
+const CONTENT = '<h1>Summer opening hours</h1>' +
+	'<p>The city library opens every day from 9:00 to 21:00 during July and August. <a href="/web/guest/hours">Read more</a></p>' +
+	'<p>New reading rooms are ready on the second floor. <a href="/web/guest/rooms">Read more</a></p>' +
+	'<p><img src="/documents/d/liferay-uswds/caleb-fisher-ti49jpndpms-unsplash-jpg"></p>' +
+	'<h4>Accessibility services</h4>' +
+	'<p>Ask at the front desk for magnifiers and audio guides. <a href="https://www.w3.org/WAI/" target="_blank">Visitor guide</a></p>';
+const contentSite = process.env.CONTENT_SITE || 'guest';
+const contentGroupId = process.env.CONTENT_GROUP_ID || '20126';
+const cmsDefinitionId = process.env.CMS_OBJECT_DEFINITION_ID || '35409';
+const cmsGroupId = process.env.CMS_GROUP_ID || '94338';
+const webContentStructureId = process.env.WEB_CONTENT_STRUCTURE_ID || '32533';
+const blogEntryId = process.env.BLOGS_ENTRY_ID || '94240';
+const PARK_CONTENT = [1750, 1070];
+
+async function writeRichText(html, selectorHint) {
+	await page.waitForFunction(() => Object.keys(window.CKEDITOR?.instances || {}).length || document.querySelector('.ck-editor__editable'), null, {timeout: 60000});
+	await sleep(2000);
+	await page.evaluate(
+		({hint, html}) => {
+			const ck4 = Object.values(window.CKEDITOR?.instances || {}).filter((i) => !/title|caption|description/i.test(i.name));
+			const big = ck4.sort((a, b) => (b.container?.$?.offsetHeight || 0) - (a.container?.$?.offsetHeight || 0))[0];
+			if (big) {
+				big.setData(html);
+				return;
+			}
+			const editables = [...document.querySelectorAll('.ck-editor__editable')].filter((el) => el.ckeditorInstance);
+			const target = (hint && editables.find((el) => el.closest(hint))) || editables[editables.length - 1];
+			target.ckeditorInstance.setData(html);
+		},
+		{hint: selectorHint || null, html}
+	);
+	await sleep(800);
+}
+
+async function openContentPanel() {
+	await page.click('.lfr-accessibility-scanner__toolbar-button');
+	await page.waitForSelector('.lfr-accessibility-scanner__panel:not([hidden])');
+	await page.waitForFunction(() => !/Scanning/i.test(document.querySelector('.lfr-accessibility-scanner__panel')?.innerText || ''), null, {timeout: 60000});
+	await page.evaluate(async () => {
+		const panel = window.__lfrAccessibilityScannerPanel;
+		panel.reports.content = null;
+		await panel.scan();
+	});
+	await sleep(800);
+}
+
+// CMS content editor (creates a draft in the CMS space).
+await page.goto(`${base}/c/cms/add_structured_content_item?objectDefinitionId=${cmsDefinitionId}&groupId=${cmsGroupId}`);
+await page.waitForSelector('.lfr-accessibility-scanner__toolbar-button', {timeout: 60000});
+await page.fill('[name="ObjectField_title"]', 'Summer opening hours').catch(() => {});
+await writeRichText(CONTENT);
+await openContentPanel();
+await shotPanel('content-cms', PARK_CONTENT);
+
+// Web Content editor: content in the structure field, a vague link in the description.
+const J = '_com_liferay_journal_web_portlet_JournalPortlet_';
+await page.goto(`${base}/group/${contentSite}/~/control_panel/manage?p_p_id=com_liferay_journal_web_portlet_JournalPortlet&p_p_state=maximized&${J}mvcRenderCommandName=%2Fjournal%2Fedit_article&${J}groupId=${contentGroupId}&${J}ddmStructureId=${webContentStructureId}`);
+await page.waitForFunction(() => document.querySelectorAll('.ck-editor__editable').length >= 2, null, {timeout: 60000});
+await sleep(2000);
+await page.evaluate((html) => {
+	const editables = [...document.querySelectorAll('.ck-editor__editable')].filter((el) => el.ckeditorInstance);
+	const content = editables.find((el) => el.closest('[data-field-name*="content"]')) || editables[editables.length - 1];
+	editables.find((el) => el !== content)?.ckeditorInstance.setData('<p>Opening hours of the city library for the summer. <a href="/web/guest/hours">Click here</a></p>');
+	content.ckeditorInstance.setData(html);
+}, CONTENT);
+await page.locator('[id$="titleMapAsXML"]').first().fill('Summer opening hours').catch(() => {});
+await sleep(800);
+await openContentPanel();
+await page.evaluate(() => document.querySelector('[data-field-name*="content"]')?.scrollIntoView({block: 'start'}));
+await sleep(600);
+await shotPanel('content-webcontent', PARK_CONTENT);
+
+// Blogs editor (existing entry, retitled for the shot).
+await api(`/o/headless-delivery/v1.0/blog-postings/${blogEntryId}`, {body: JSON.stringify({articleBody: CONTENT, headline: 'Summer opening hours'}), method: 'PATCH'});
+const B = '_com_liferay_blogs_web_portlet_BlogsAdminPortlet_';
+await page.goto(`${base}/group/${contentSite}/~/control_panel/manage?p_p_id=com_liferay_blogs_web_portlet_BlogsAdminPortlet&p_p_state=maximized&${B}mvcRenderCommandName=%2Fblogs%2Fedit_entry&${B}entryId=${blogEntryId}`);
+await page.waitForSelector('.lfr-accessibility-scanner__toolbar-button', {timeout: 60000});
+await setProductMenu(false);
+await writeRichText(CONTENT);
+await openContentPanel();
+await shotPanel('content-blogs', PARK_CONTENT);
+
+// CMS publish gate: Global site setting on, Publish with a critical issue.
+const globalId = await page.evaluate(() => Liferay.ThemeDisplay.getCompanyGroupId());
+const previousSettings = await api(`/o/c/accessibilitysettings/scopes/${globalId}?pageSize=20`);
+for (const item of previousSettings.items || []) {
+	await api(`/o/c/accessibilitysettings/${item.id}`, {method: 'DELETE'});
+}
+const gate = await api(`/o/c/accessibilitysettings/scopes/${globalId}`, {body: JSON.stringify({blockPublishOnCritical: true, disableBlogsEditor: false}), method: 'POST'});
+await page.goto(`${base}/c/cms/add_structured_content_item?objectDefinitionId=${cmsDefinitionId}&groupId=${cmsGroupId}`);
+await page.waitForSelector('.lfr-accessibility-scanner__toolbar-button', {timeout: 60000});
+await page.fill('[name="ObjectField_title"]', 'New reading rooms').catch(() => {});
+await writeRichText('<p>The new reading rooms on the second floor open on Monday.</p><p><img src="/documents/d/liferay-uswds/caleb-fisher-ti49jpndpms-unsplash-jpg"></p>');
+await page.locator('button.btn-primary[type="submit"]').first().click();
+await page.waitForSelector('.alert-danger', {timeout: 30000}).catch(() => {});
+await sleep(1200);
+await shotPanel('publish-gate', PARK_CONTENT);
+
+// Settings form (the Global entry that turned the gate on).
+const definitions = await api('/o/object-admin/v1.0/object-definitions?search=AccessibilitySetting&fields=className,name');
+const settingsClass = (definitions.items || []).find((d) => d.name === 'AccessibilitySetting')?.className || '';
+const settingsPortlet = 'com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_' + settingsClass.split('#')[1];
+await page.goto(`${base}/group/global/~/control_panel/manage?p_p_id=${settingsPortlet}`);
+await sleep(2500);
+await setProductMenu(false);
+const entry = page.locator('table a, .table-list-title a, [role="row"] a').first();
+if (await entry.count()) {
+	await entry.click();
+	await sleep(2500);
+}
+await page.mouse.move(...PARK_CONTENT);
+await page.screenshot({path: `${out}/settings.png`});
+console.log('shot settings');
+if (gate.id) {
+	await api(`/o/c/accessibilitysettings/${gate.id}`, {method: 'DELETE'});
+}
+
+// 6. Site view from the Page Tree of the published page, with score stickers (last: it opens the product menu).
+await page.goto(`${base}/web/${site}/${editPage}`);
+await page.waitForLoadState('load');
+await sleep(1500);
+if (!(await page.$('.pages-tree'))) {
+	await page.locator('[data-qa-id="productMenu"]').first().click();
+	await sleep(1500);
+	await page.locator('.lfr-product-menu-panel').getByText('Page Tree', {exact: true}).first().click();
+}
+await page.waitForSelector('.lfr-accessibility-scanner__tree-score', {timeout: 30000});
+await page.click('.lfr-accessibility-scanner__tree-button');
+await page.waitForSelector('.lfr-accessibility-scanner__panel:not([hidden]) .lfr-accessibility-scanner__site');
+await sleep(3000);
+await shotPanel('editor-site');
+
+await setProductMenu(false);
 await browser.close();

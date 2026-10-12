@@ -32,11 +32,11 @@
 			<nav class="site-nav" id="site-nav" aria-label="Primary">
 				<ul>
 					<li><a href="#why">Why</a></li>
-					<li><a href="#editor">In the editor</a></li>
-					<li><a href="#site-scans">Site scans</a></li>
+					<li><a href="#editor">Page editor</a></li>
+					<li><a href="#site-scans">Page Tree</a></li>
+					<li><a href="#content">Content</a></li>
+					<li><a href="#settings">Settings</a></li>
 					<li><a href="#report">Report</a></li>
-										<li><a href="#content">Content</a></li>
-					<li><a href="#how">How it works</a></li>
 				</ul>
 			</nav>
 			<a class="btn btn-primary btn-sm header-cta" href="https://github.com/marcoscv-work/liferay-accessibility-scanner">Get the extension</a>
@@ -50,7 +50,7 @@
 				<div class="hero-copy">
 					<p class="eyebrow">Client extension for Liferay DXP</p>
 					<h1 id="hero-title">Accessibility findings that <em>speak Liferay</em></h1>
-					<p class="lead">axe-core plus rules that understand how Liferay pages are built. Every issue points at the fragment, the content or the style book to fix, right inside the page editor. Scan the whole site, keep the history in Objects, and share a report your team can read.</p>
+					<p class="lead">axe-core plus rules that understand how Liferay pages are built. Every issue points at the fragment, the content or the style book to fix, right where pages and content are made: the page editor, the Page Tree, the CMS, Web Content and Blogs. Scan the whole site, keep the history in Objects, and share a report your team can read.</p>
 					<div class="hero-actions">
 						<a class="btn btn-accent" href="#how">
 							See how it works
@@ -78,7 +78,7 @@
 		<section class="stats" aria-label="At a glance">
 			<div class="container">
 				<div class="stat"><strong>axe + 9 rules</strong><span>axe-core 4.14, nine Liferay-aware rules and five content checks</span></div>
-				<div class="stat"><strong>3 scopes</strong><span>Draft in the editor, published page as a visitor, whole site</span></div>
+				<div class="stat"><strong>5 places</strong><span>Page editor, Page Tree, CMS, Web Content and Blogs</span></div>
 				<div class="stat"><strong>Light and dark</strong><span>A pass per color scheme, chosen for the whole site</span></div>
 				<div class="stat"><strong>Zero servers</strong><span>Runs in the browser, stores in Objects, ships as one zip</span></div>
 			</div>
@@ -103,6 +103,16 @@
 							</tr>
 						</thead>
 						<tbody>
+							<tr>
+								<th scope="row">Where it runs</th>
+								<td data-label="axe in DevTools"><span class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>A browser extension each person installs</span></td>
+								<td data-label="Accessibility Scanner"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Inside Liferay: page editor, Page Tree, CMS, Web Content and Blogs, for every author</span></td>
+							</tr>
+							<tr>
+								<th scope="row">Stopping problems before they go live</th>
+								<td data-label="axe in DevTools"><span class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>After the fact, if someone looks</span></td>
+								<td data-label="Accessibility Scanner"><span class="yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Optional publish gate in the CMS for critical issues</span></td>
+							</tr>
 							<tr>
 								<th scope="row">Where the issue is</th>
 								<td data-label="axe in DevTools"><span class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>A CSS selector</span></td>
@@ -145,7 +155,7 @@
 				<div class="section-head reveal">
 					<p class="eyebrow">Product tour</p>
 					<h2 id="features-title">Built into the place where pages are made</h2>
-					<p>One button next to the viewport switches in the page editor. A drawer the size of the configuration panel with two tabs, Draft and Published. Site scans live in the Page Tree, where all pages are.</p>
+					<p>One button next to the viewport switches in the page editor opens a drawer the size of the configuration panel, with two tabs: Draft and Published.</p>
 				</div>
 
 				<article class="feature reveal">
@@ -177,20 +187,24 @@
 					</div>
 				</article>
 
-				<article class="feature reveal" id="site-scans">
-					<div class="feature-copy">
-						<h3>Page Tree: the whole site, as an anonymous visitor</h3>
-						<p class="muted">One button in the Page Tree header scans every page. Each page is fetched without credentials and audited in your browser, in light, dark or both. Results go to site-scoped Objects with a score per page, so the next scan shows the delta, and every page in the tree gets its score next to its name.</p>
-						<ul class="feature-list">
-							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Light and dark passes</strong> for the whole site, because one site can mix themes and style books.</span></li>
-							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Theme and style book recorded per page</strong>, so design issues are attributed to the design.</span></li>
-							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Progress, cancel and a stale-scan notice</strong> after 14 days without scanning.</span></li>
-						</ul>
-					</div>
-					<div class="shot-panel">
-						<img class="framed" src="assets/shots/framed/panel-site.webp" width="1800" height="2480" alt="The site accessibility drawer, opened from the Page Tree: last scan with a score of 47 out of 100, 95 violations on 8 pages, a color scheme selector set to light and dark, and a Scan site now button." loading="lazy">
-					</div>
-				</article>
+			</div>
+		</section>
+
+		<!-- Page Tree -->
+		<section class="section" id="site-scans" aria-labelledby="tree-title">
+			<div class="container">
+				<div class="section-head reveal">
+					<p class="eyebrow">Site scans</p>
+					<h2 id="tree-title">The whole site, from the Page Tree</h2>
+					<p>Site scans live where all pages are listed. One button in the Page Tree header scans every page as an anonymous visitor, in light, dark or both, and every page in the tree shows its score next to its name.</p>
+				</div>
+				<img class="framed reveal" src="assets/shots/framed/page-tree.webp" width="3200" height="2000" alt="The Page Tree of a site with a score sticker next to every page (46, 47, 51 and 41) and an Accessibility button next to Add Page; the Site accessibility drawer on the right shows a score of 47 out of 100, the color scheme selector set to light and dark, a Scan site now button and the pages ranked by issues with their theme." loading="lazy">
+				<ul class="feature-list feature-list-columns reveal">
+					<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>A score on every page</strong>, colored green, yellow or red, with the issue count in its tooltip.</span></li>
+					<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Light and dark passes</strong> chosen for the whole site, because one site can mix themes and style books.</span></li>
+					<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>History in site-scoped Objects</strong>: delta against the previous scan and a notice after 14 days without scanning.</span></li>
+					<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Theme and style book per page</strong>, so design issues reach the design owner.</span></li>
+				</ul>
 			</div>
 		</section>
 
@@ -202,27 +216,35 @@
 					<h2 id="content-title">Checks inside the CMS, Web Content and Blogs</h2>
 					<p>The same extension joins the screens where authors write. It reads every rich text field through the editor itself, CKEditor 4 or 5, and audits that HTML before it ever reaches a page.</p>
 				</div>
-				<div class="grid grid-3 reveal">
-					<div class="card">
-						<span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h6"/></svg></span>
-						<h3>CMS content editor</h3>
-						<p class="muted">Rich text fields of any structure in a space. A site can hold the Publish button while critical issues remain, and the drawer opens on exactly those.</p>
-					</div>
-					<div class="card">
-						<span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h10l6 6v10a2 2 0 0 1-2 2H4z"/><path d="M14 4v6h6"/></svg></span>
-						<h3>Web Content</h3>
-						<p class="muted">Every rich text field of the structure, plus image fields saved without a description, which Liferay renders as the alternative text.</p>
-					</div>
-					<div class="card">
-						<span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>
-						<h3>Blogs</h3>
-						<p class="muted">The entry body as the author writes it, with a "Go to the field" action that puts the caret back where the issue is.</p>
-					</div>
+				<figure class="shot-figure reveal">
+					<img class="framed" src="assets/shots/framed/content-cms.webp" width="3200" height="2000" alt="The CMS content editor with a text titled Summer opening hours; the Accessibility drawer lists 8 issues in the Content field: an image without alternative text, a skipped heading level, two Read more links, the same link text going to different places, a link opening a new tab without warning and a level 1 heading inside the content." loading="lazy">
+					<figcaption><strong>CMS content editor.</strong> Rich text fields of any structure in a space, checked before the content reaches a page.</figcaption>
+				</figure>
+				<div class="grid grid-2 reveal">
+					<figure class="shot-figure">
+						<img class="framed" src="assets/shots/framed/content-webcontent.webp" width="3200" height="2000" alt="The Web Content editor with the Accessibility drawer listing 9 issues in 2 fields, the description and the structure's Content field." loading="lazy">
+						<figcaption><strong>Web Content.</strong> Every rich text field of the structure, the description, and image fields without alternative text.</figcaption>
+					</figure>
+					<figure class="shot-figure">
+						<img class="framed" src="assets/shots/framed/content-blogs.webp" width="3200" height="2000" alt="The Blogs entry editor with the Accessibility drawer listing 8 issues in the entry body." loading="lazy">
+						<figcaption><strong>Blogs.</strong> The entry body as the author writes it, with "Go to the field" to jump back to the editor.</figcaption>
+					</figure>
 				</div>
-				<ul class="feature-list reveal" style="margin-top: var(--space-6);">
+				<ul class="feature-list feature-list-columns reveal">
 					<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>What it catches in content:</strong> images without alternative text, level 1 headings inside the body, skipped heading levels, "Read more" links, repeated link texts, new tabs without warning, tables without headers.</span></li>
 					<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Safe by design:</strong> the HTML is parsed inert, without scripts, handlers or frames, and audited off-screen field by field.</span></li>
 				</ul>
+				<div class="gate reveal" id="publish-gate">
+					<div class="feature-copy">
+						<h3>Publish gate: critical issues never go live</h3>
+						<p class="muted">When a site turns it on, the CMS holds the Publish button, scans the content and lets it through only when no critical issue is left. Otherwise the drawer opens on exactly those issues.</p>
+						<ul class="feature-list">
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Uses the CMS's own validation step</strong>, so drafts and Save as Draft are never blocked.</span></li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Off by default</strong>; one switch in the Accessibility Settings turns it on.</span></li>
+						</ul>
+					</div>
+					<img class="framed" src="assets/shots/framed/publish-gate.webp" width="3200" height="2000" alt="The CMS editor after pressing Publish: a toast says Publishing is blocked, 1 critical accessibility issue, and the drawer is filtered to the critical image without alternative text." loading="lazy">
+				</div>
 			</div>
 		</section>
 
@@ -234,14 +256,20 @@
 					<h2 id="settings-title">Each site decides what is on</h2>
 					<p>An Accessibility Settings entry in Site Administration turns features off for that site. Without one, everything works as shipped. Who may run site scans follows regular role permissions.</p>
 				</div>
-				<div class="checks-light reveal">
-					<ul class="feature-list">
-						<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Hide the panel in the page editor</span></li>
-						<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Disable the published page scan or site scans</span></li>
-						<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Disable checks in the CMS, Web Content or Blogs editors</span></li>
-						<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Block publishing CMS content with critical issues</span></li>
-					</ul>
-				</div>
+				<article class="feature feature-media-wide reveal">
+					<div class="feature-copy">
+						<ul class="feature-list">
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Hide the panel in the page editor</span></li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Disable the published page scan or site scans</span></li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Disable checks in the CMS, Web Content or Blogs editors</span></li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Block publishing CMS content with critical issues</span></li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Site scans offered only to roles that can add Accessibility Scan entries</span></li>
+						</ul>
+					</div>
+					<div>
+						<img class="framed" src="assets/shots/framed/settings.webp" width="2200" height="1800" alt="The Accessibility Settings form with seven checkboxes; Block publishing CMS content with critical issues is checked." loading="lazy">
+					</div>
+				</article>
 			</div>
 		</section>
 
@@ -347,11 +375,11 @@
 				<ol class="steps reveal">
 					<li class="step">
 						<h3>Deploy the client extension</h3>
-						<p>Drop the zip in your Liferay deploy folder or install it from Marketplace. It brings a global JavaScript and the Accessibility Scan, Page and Finding Objects.</p>
+						<p>Drop the zip in your Liferay deploy folder or install it from Marketplace. It brings a global JavaScript and the Accessibility Scan, Page, Finding and Settings Objects.</p>
 					</li>
 					<li class="step">
-						<h3>Open any page in the editor</h3>
-						<p>A tiny loader runs on every page and only fetches the scanner when the editor is open. Press the new toolbar button and scan the draft or the published page.</p>
+						<h3>Author as usual</h3>
+						<p>A tiny loader runs on every page and only fetches the scanner in the page editor, the Page Tree and the content editors. The Accessibility button sits in each toolbar.</p>
 					</li>
 					<li class="step">
 						<h3>Scan the site, read the report</h3>
@@ -361,11 +389,11 @@
 				<div class="ships reveal">
 					<div class="card">
 						<h3>Global JavaScript</h3>
-						<p>The editor panel, the scanner (axe-core and the Liferay rules), the published and site scanners. Clay classes only, served by the portal.</p>
+						<p>The drawer for the page editor, the Page Tree and the content editors, axe-core with the Liferay rules, and the site scanner. Clay classes only, served by the portal.</p>
 					</div>
 					<div class="card">
 						<h3>Objects (batch)</h3>
-						<p>Accessibility Scan, Page and Finding, scoped per site, with English and Spanish labels and REST endpoints out of the box.</p>
+						<p>Accessibility Scan, Page, Finding and Settings, scoped per site, with English and Spanish labels and REST endpoints out of the box.</p>
 					</div>
 					<div class="card">
 						<h3>Report fragment</h3>

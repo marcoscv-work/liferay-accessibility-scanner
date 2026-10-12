@@ -28,18 +28,22 @@ Accessibility Scanner brings WCAG scanning into Liferay authoring. It runs axe-c
 | Fragment | `dist/accessibility-scanner-fragments.zip`, imported from the Fragments admin (documented in the install guide) |
 | Compatible versions | Only the rows marked green in the compatibility matrix below |
 
-## Storefront images (1920×1080 PNG, one upload at a time, in this order)
+## Storefront images (1920×1080 PNG, ten, the wizard maximum; upload one at a time, in this order)
 
 | # | File | Caption (image description) |
 |---|---|---|
 | 1 | `storefront/01-editor-draft.png` | Accessibility findings inside the page editor, mapped to the fragment and editable to fix |
-| 2 | `storefront/02-editor-full.png` | A docked toolbar button opens a drawer the size of the configuration panel, with Draft and Published tabs |
-| 3 | `storefront/03-published.png` | Published tab: the public page audited as an anonymous visitor, results mapped back to your draft |
-| 4 | `storefront/04-site-scan.png` | Page Tree: one button scans the whole site in light and dark, and every page shows its score |
-| 5 | `storefront/05-report.png` | Accessibility Report fragment: score, issues by impact, trend, pages, rules, fragments, themes and style books |
-| 6 | `storefront/06-report-mobile.png` | The report is responsive and switches between light and dark results |
+| 2 | `storefront/02-published.png` | Published tab: the public page audited as an anonymous visitor, results mapped back to your draft |
+| 3 | `storefront/03-page-tree.png` | Site scans from the Page Tree: every page scanned in light and dark, with its score next to its name |
+| 4 | `storefront/04-cms-editor.png` | CMS content editor: every rich text field checked before it reaches a page |
+| 5 | `storefront/05-web-content.png` | Web Content editor: rich text fields of any structure, description included |
+| 6 | `storefront/06-blogs.png` | Blogs editor: the entry body checked as the author writes it |
+| 7 | `storefront/07-publish-gate.png` | Optional publish gate in the CMS: critical issues hold the Publish button |
+| 8 | `storefront/08-settings.png` | Per-site Accessibility Settings decide what is on, with no code |
+| 9 | `storefront/09-report.png` | Accessibility Report fragment: score, issues by impact, trend, pages, rules, fragments, themes and style books |
+| 10 | `storefront/10-report-mobile.png` | The report is responsive and switches between light and dark results |
 
-Regenerate with `scripts/storefront-shots.mjs` (raw captures from the local bundle; `SHOT_SITE`/`SHOT_PAGE` pick the site and page, default the Liferay USWDS landing page so the editor shows a real-looking site) followed by `scripts/compose-shots.mjs` (framing, margins, zoomed drawer, icon). Video: none for the first version.
+Regenerate with `scripts/storefront-shots.mjs` (raw captures from the local bundle; `SHOT_SITE`/`SHOT_PAGE` pick the site and page, default the Liferay USWDS landing page so the editor shows a real-looking site; content editor shots use the CMS space, the Basic Web Content structure and a blog entry of the local bundle, see the variables at the top of section 5) followed by `scripts/compose-shots.mjs` (framing, margins, zoomed drawer, icon). Video: none for the first version.
 
 ## Version
 

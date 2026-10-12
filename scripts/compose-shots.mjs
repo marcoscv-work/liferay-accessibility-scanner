@@ -20,13 +20,19 @@ fs.mkdirSync(out, {recursive: true});
 const ACCENT = '#ea580c';
 const BG = `radial-gradient(70% 60% at 85% 0%, #ffe8d6 0%, rgba(255, 232, 214, 0) 70%), linear-gradient(180deg, #fbfcfe 0%, #eef2f7 100%)`;
 
+const PANEL_CROP = {x: 64 / 624, y: 120 / 1984, w: 1 - 64 / 624, h: 1 - 120 / 1984};
+
 const COMPOSITIONS = [
 	// Full editor behind, the drawer zoomed in front: nothing gets cut mid-sentence.
 	{height: 1000, layers: {base: 'editor-draft.png', overlay: 'editor-draft-panel.png', overlayCrop: 0.58}, name: 'hero-editor', padding: 72, width: 1600},
-	{bar: true, height: 1000, name: 'editor-full', padding: 72, src: 'editor-draft.png', width: 1600},
-	{crop: {x: 64 / 624, y: 120 / 1984, w: 1 - 64 / 624, h: 1 - 120 / 1984}, height: 1240, name: 'panel-draft', padding: 80, src: 'editor-draft-panel.png', width: 900},
-	{crop: {x: 64 / 624, y: 120 / 1984, w: 1 - 64 / 624, h: 1 - 120 / 1984}, height: 1240, name: 'panel-published', padding: 80, src: 'editor-published-panel.png', width: 900},
-	{crop: {x: 64 / 624, y: 120 / 1984, w: 1 - 64 / 624, h: 1 - 120 / 1984}, height: 1240, name: 'panel-site', padding: 80, src: 'editor-site-panel.png', width: 900},
+	{crop: PANEL_CROP, height: 1240, name: 'panel-draft', padding: 80, src: 'editor-draft-panel.png', width: 900},
+	{crop: PANEL_CROP, height: 1240, name: 'panel-published', padding: 80, src: 'editor-published-panel.png', width: 900},
+	{bar: true, height: 1000, name: 'page-tree', padding: 72, src: 'editor-site.png', url: 'yoursite.com/web/guest/home', width: 1600},
+	{bar: true, height: 1000, name: 'content-cms', padding: 72, src: 'content-cms.png', url: 'yoursite.com/web/cms/e/basic-web-content', width: 1600},
+	{bar: true, height: 1000, name: 'content-webcontent', padding: 72, src: 'content-webcontent.png', url: 'yoursite.com/group/guest/~/control_panel/manage', width: 1600},
+	{bar: true, height: 1000, name: 'content-blogs', padding: 72, src: 'content-blogs.png', url: 'yoursite.com/group/guest/~/control_panel/manage', width: 1600},
+	{bar: true, height: 1000, name: 'publish-gate', padding: 72, src: 'publish-gate.png', url: 'yoursite.com/web/cms/e/basic-web-content', width: 1600},
+	{crop: {x: 0.295, y: 0.045, w: 0.41, h: 0.55}, height: 900, name: 'settings', padding: 64, src: 'settings.png', width: 1100},
 	{bleed: true, crop: {x: 0, y: 0, w: 1, h: 1}, height: 1100, name: 'report-desktop', padding: 72, src: 'report-cards.png', width: 1600},
 	{height: 1240, name: 'report-mobile', padding: 90, phone: true, src: 'report-mobile.png', width: 760},
 ];
@@ -85,16 +91,20 @@ function html(comp) {
 		.clip { width: ${innerW}px; height: ${innerH - (bar ? 44 : 0)}px; overflow: hidden; }
 		.clip img { display: block; }
 		img { display: block; }
-	</style></head><body><div class="frame">${bar ? `<div class="bar"><span></span><span></span><span></span><div class="url">yoursite.com/web/guest/home?p_l_mode=edit</div></div>` : ''}${media}</div></body></html>`;
+	</style></head><body><div class="frame">${bar ? `<div class="bar"><span></span><span></span><span></span><div class="url">${comp.url || 'yoursite.com/web/guest/home?p_l_mode=edit'}</div></div>` : ''}${media}</div></body></html>`;
 }
 
 const MARKETPLACE = [
 	{caption: 'Accessibility findings inside the page editor, mapped to the fragment and editable to fix', layers: {base: 'editor-draft.png', overlay: 'editor-draft-panel.png', overlayCrop: 0.6}, name: '01-editor-draft'},
-	{bar: true, caption: 'A docked toolbar button opens a drawer the size of the configuration panel, with Draft, Published and Site tabs', name: '02-editor-full', src: 'editor-draft.png'},
-	{caption: 'Published tab: the public page audited as an anonymous visitor, results mapped back to your draft', layers: {base: 'editor-published.png', overlay: 'editor-published-panel.png', overlayCrop: 0.6}, name: '03-published'},
-	{caption: 'Site tab: every page scanned in light and dark, scores and deltas stored in site-scoped Objects', layers: {base: 'editor-site.png', overlay: 'editor-site-panel.png', overlayCrop: 0.6}, name: '04-site-scan'},
-	{bleed: true, caption: 'Accessibility Report fragment: score, issues by impact, trend, pages, rules, fragments, themes and style books', crop: {x: 0, y: 0, w: 1, h: 1}, name: '05-report', src: 'report-cards.png'},
-	{caption: 'The report is responsive and switches between light and dark results', name: '06-report-mobile', phone: true, src: 'report-mobile.png', width: 760},
+	{caption: 'Published tab: the public page audited as an anonymous visitor, results mapped back to your draft', layers: {base: 'editor-published.png', overlay: 'editor-published-panel.png', overlayCrop: 0.6}, name: '02-published'},
+	{caption: 'Site scans from the Page Tree: every page scanned in light and dark, with its score next to its name', name: '03-page-tree', src: 'editor-site.png'},
+	{caption: 'CMS content editor: every rich text field checked before it reaches a page', name: '04-cms-editor', src: 'content-cms.png'},
+	{caption: 'Web Content editor: rich text fields of any structure, description included', name: '05-web-content', src: 'content-webcontent.png'},
+	{caption: 'Blogs editor: the entry body checked as the author writes it', name: '06-blogs', src: 'content-blogs.png'},
+	{caption: 'Optional publish gate in the CMS: critical issues hold the Publish button', name: '07-publish-gate', src: 'publish-gate.png'},
+	{caption: 'Per-site Accessibility Settings decide what is on, with no code', crop: {x: 0, y: 0, w: 0.75, h: 0.7}, name: '08-settings', src: 'settings.png'},
+	{bleed: true, caption: 'Accessibility Report fragment: score, issues by impact, trend, pages, rules, fragments, themes and style books', crop: {x: 0, y: 0, w: 1, h: 1}, name: '09-report', src: 'report-cards.png'},
+	{caption: 'The report is responsive and switches between light and dark results', name: '10-report-mobile', phone: true, src: 'report-mobile.png', width: 760},
 ].map((c) => ({height: 1080, padding: 72, width: 1920, ...c, out: path.resolve('marketplace/storefront')}));
 
 const browser = await chromium.launch();
