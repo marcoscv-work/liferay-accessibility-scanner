@@ -138,6 +138,8 @@ const ADAPTERS = [
 		settingKey: 'disableCMSEditor',
 		structuredFindings: () => [],
 		toolbar: () => document.querySelector('.content-editor__toolbar'),
+		// The toggle sits in the editor toolbar, right after the title.
+		dock: () => ({after: '.tbar-item-expand', itemClass: 'tbar-item', list: document.querySelector('.content-editor__toolbar .tbar-nav')}),
 	},
 	{
 		detect: () => document.querySelector('form.edit-article-form'),
@@ -148,6 +150,9 @@ const ADAPTERS = [
 		settingKey: 'disableWebContentEditor',
 		structuredFindings: journalImageFindings,
 		toolbar: () => document.querySelector('nav.tbar-article'),
+		// The editor has its own Properties sidebar: the drawer takes its place.
+		sidebar: () => document.querySelector('.contextual-sidebar.edit-article-sidebar'),
+		dock: () => ({after: '.tbar-item-expand', itemClass: 'tbar-item', list: document.querySelector('nav.tbar-article .tbar-nav')}),
 	},
 	{
 		detect: () => {
@@ -161,6 +166,8 @@ const ADAPTERS = [
 		settingKey: 'disableBlogsEditor',
 		structuredFindings: () => [],
 		toolbar: () => null,
+		// Blogs has no editor toolbar: the toggle joins the control menu tools.
+		dock: () => ({itemClass: 'control-menu-nav-item', list: document.querySelector('.user-control-group .control-menu-nav'), prepend: true}),
 	},
 ];
 

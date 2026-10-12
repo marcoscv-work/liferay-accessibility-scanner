@@ -163,8 +163,11 @@ for (const screen of SCREENS) {
 			throw new Error('no rich text editor found');
 		}
 		await page.waitForTimeout(1000);
-		await page.waitForSelector('.lfr-accessibility-scanner__fab', {timeout: 30000});
-		await page.click('.lfr-accessibility-scanner__fab');
+		// The toggle is docked in the editor toolbar; the floating button is the fallback.
+		const toggle = page.locator('.lfr-accessibility-scanner__toolbar-button, .lfr-accessibility-scanner__fab:visible').first();
+		await toggle.waitFor({timeout: 30000});
+		const docked = await page.locator('.lfr-accessibility-scanner__toolbar-button').count();
+		await toggle.click();
 		await page.waitForSelector('.lfr-accessibility-scanner__panel:not([hidden])');
 		// Opening the drawer starts a scan; wait for it, then scan again to read the new content.
 		await page.waitForFunction(() => !/Scanning/i.test(document.querySelector('.lfr-accessibility-scanner__panel')?.innerText || ''), null, {timeout: 60000});
@@ -185,7 +188,7 @@ for (const screen of SCREENS) {
 		const missing = EXPECTED_RULES.filter((rule) => !report.rules.includes(rule));
 		const ok = !missing.length;
 		failures += ok ? 0 : 1;
-		console.log(`${ok ? 'PASS' : 'FAIL'}  ${screen.name}  [${written}] ${report.summary}`);
+		console.log(`${ok ? 'PASS' : 'FAIL'}  ${screen.name}  [${written}${docked ? ', toggle in toolbar' : ', floating toggle'}] ${report.summary}`);
 		console.log(`      rules: ${report.rules.join(', ')}${missing.length ? `  | missing: ${missing.join(', ')}` : ''}`);
 		await page.screenshot({path: `/tmp/content-smoke-${screen.name.replace(/\W+/g, '-').toLowerCase()}.png`});
 	}

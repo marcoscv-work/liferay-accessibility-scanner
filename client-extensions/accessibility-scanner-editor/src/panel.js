@@ -269,6 +269,7 @@ export class ScannerPanel {
 		}
 		if (this.mode === 'content') {
 			this.host.classList.add('lfr-accessibility-scanner--content');
+			this.dockToolbarButton();
 			this.hookPublish();
 		}
 	}
@@ -333,20 +334,40 @@ export class ScannerPanel {
 	 * The floating button stays as a fallback when the toolbar is not there.
 	 */
 	dockToolbarButton() {
+		// Where the toggle goes: next to the viewport buttons in the page
+		// editor, or in the toolbar of each content editor.
+		const locate = () => {
+			if (this.mode === 'content') {
+				return this.adapter?.dock?.() || null;
+			}
+			const list = document.querySelector('.page-editor__toolbar .middle.navbar-nav');
+			const viewportItem = list?.querySelector('.nav-item');
+			return viewportItem ? {afterElement: viewportItem, itemClass: 'nav-item', list} : null;
+		};
+		const buttonClass = this.mode === 'content' ? 'btn btn-monospaced btn-sm btn-outline-borderless btn-outline-secondary' : 'btn btn-monospaced btn-sm btn-secondary ml-3';
+
 		const insert = () => {
 			if (this.toolbarButton?.isConnected) {
 				return true;
 			}
-			const nav = document.querySelector('.page-editor__toolbar .middle.navbar-nav');
-			const viewportItem = nav?.querySelector('.nav-item');
-			if (!nav || !viewportItem) {
+			const target = locate();
+			if (!target?.list) {
 				return false;
 			}
 			const item = document.createElement('li');
-			item.className = 'nav-item lfr-accessibility-scanner__toolbar-item';
+			item.className = `${target.itemClass} cadmin lfr-accessibility-scanner__toolbar-item`;
 			item.setAttribute('role', 'presentation');
-			item.innerHTML = `<button aria-controls="${this.panelId}" aria-expanded="${this.open}" aria-pressed="${this.open}" class="btn btn-monospaced btn-sm btn-secondary ml-3 lfr-accessibility-scanner__toolbar-button ${this.open ? 'active' : ''}" title="${escapeHtml(t('toggle'))}" type="button">${icon('accessibility')}<span class="sr-only">${escapeHtml(t('toggle'))}</span><span class="badge badge-danger badge-pill" data-count hidden></span></button>`;
-			viewportItem.insertAdjacentElement('afterend', item);
+			item.innerHTML = `<button aria-controls="${this.panelId}" aria-expanded="${this.open}" aria-pressed="${this.open}" class="${buttonClass} lfr-accessibility-scanner__toolbar-button ${this.open ? 'active' : ''}" title="${escapeHtml(t('toggle'))}" type="button">${icon('accessibility')}<span class="sr-only">${escapeHtml(t('toggle'))}</span><span class="badge badge-danger badge-pill" data-count hidden></span></button>`;
+			const after = target.afterElement || (target.after && target.list.querySelector(`:scope > ${target.after}`));
+			if (after) {
+				after.insertAdjacentElement('afterend', item);
+			}
+			else if (target.prepend) {
+				target.list.prepend(item);
+			}
+			else {
+				target.list.appendChild(item);
+			}
 			this.toolbarButton = item.querySelector('button');
 			this.toolbarButton.addEventListener('click', () => this.toggle());
 			this.host.classList.add('lfr-accessibility-scanner--docked');
@@ -358,6 +379,20 @@ export class ScannerPanel {
 		const toolbar = document.querySelector('.page-editor__toolbar') || document.body;
 		this.toolbarObserver = new MutationObserver(() => insert());
 		this.toolbarObserver.observe(toolbar, {childList: true, subtree: true});
+	}
+
+	/**
+	 * Content editors have no slot for a sidebar, so while the drawer is open
+	 * the page leaves room for it instead of being covered.
+	 */
+	pushPage(open) {
+		// Editors with their own sidebar (Web Content) get the drawer on top of it instead.
+		if (this.mode !== 'content' || (open && this.adapter?.sidebar?.()?.offsetWidth)) {
+			return;
+		}
+		const root = document.documentElement;
+		root.classList.toggle('lfr-accessibility-scanner-pushed', open);
+		root.style.setProperty('--lfr-accessibility-push', open ? '320px' : '0px');
 	}
 
 	/** Mirrors open state and the counter on every toggle (toolbar and floating). */
@@ -387,9 +422,9 @@ export class ScannerPanel {
 	 * nothing else. Outside the editor it hangs below the control menu.
 	 */
 	updateTop() {
-		const sidebar = document.querySelector(
-			'.page-editor__item-configuration-sidebar, [aria-label="Configuration Panel"]'
-		);
+		const sidebar =
+			this.adapter?.sidebar?.() ||
+			document.querySelector('.page-editor__item-configuration-sidebar, [aria-label="Configuration Panel"]');
 		const bar =
 			this.adapter?.toolbar?.() ||
 			document.querySelector('.page-editor__toolbar') ||
@@ -410,6 +445,15 @@ export class ScannerPanel {
 				this.sidebarObserver.observe(sidebar);
 			}
 		}
+		// When the page made room for the drawer and the header shrank with it,
+		// the drawer runs to the top so no blank corner is left above it.
+		if (
+			document.documentElement.classList.contains('lfr-accessibility-scanner-pushed') &&
+			bar &&
+			bar.getBoundingClientRect().right < window.innerWidth - 2
+		) {
+			top = 0;
+		}
 		this.host.style.setProperty('--lfr-accessibility-top', `${Math.round(Math.max(0, top))}px`);
 		this.host.style.setProperty('--lfr-accessibility-width', `${Math.round(width)}px`);
 	}
@@ -417,6 +461,7 @@ export class ScannerPanel {
 	/** Removes everything the panel added to the page (SPA navigation away). */
 	destroy() {
 		this.siteAbort?.abort();
+		this.pushPage(false);
 		this.publishHandle?.detach?.();
 		this.toolbarObserver?.disconnect();
 		this.sidebarObserver?.disconnect();
@@ -430,6 +475,7 @@ export class ScannerPanel {
 
 	toggle(force) {
 		this.open = typeof force === 'boolean' ? force : !this.open;
+		this.pushPage(this.open);
 		this.updateTop();
 		this.panel.hidden = !this.open;
 		this.syncToggles();
@@ -443,7 +489,11 @@ export class ScannerPanel {
 			else if (!this.reports[this.source]) {
 				this.scan();
 			}
-			this.panel.querySelector('[data-action="close"]').focus();
+			// Focus the drawer title: announced by screen readers, and it does
+			// not pop the Close tooltip the way focusing the button did.
+			const title = this.panel.querySelector(`#${this.panelId}-title`);
+			title.setAttribute('tabindex', '-1');
+			title.focus({preventScroll: true});
 		}
 		else {
 			this.clearHighlight();

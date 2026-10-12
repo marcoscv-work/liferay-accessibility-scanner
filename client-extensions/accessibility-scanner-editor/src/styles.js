@@ -66,6 +66,10 @@ html:not(#__):not(#___) .cadmin .lfr-accessibility-scanner__fab .badge {
 	top: -0.5rem;
 	white-space: nowrap;
 }
+/* Content editors: the page makes room for the open drawer. */
+html.lfr-accessibility-scanner-pushed > body {
+	padding-right: var(--lfr-accessibility-push, 0px) !important;
+}
 html:not(#__):not(#___) .cadmin .lfr-accessibility-scanner__panel {
 	background-color: var(--cadmin-white, #fff);
 	border-left: 1px solid var(--cadmin-gray-300, #e7e7ed);
