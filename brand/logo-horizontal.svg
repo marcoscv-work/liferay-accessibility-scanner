@@ -14,13 +14,11 @@
     <path d="M808 680 V744 Q808 808 744 808 H680"/>
     <path d="M344 808 H280 Q216 808 216 744 V680"/>
   </g>
-  <!-- Accessibility figure -->
-  <circle cx="512" cy="372" r="58" fill="#ffffff"/>
-  <g fill="none" stroke="#ffffff" stroke-width="64" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M372 482 H652"/>
-    <path d="M512 482 V578"/>
-    <path d="M512 578 L446 682"/>
-    <path d="M512 578 L578 682"/>
+  <!-- Accessibility figure (international symbol proportions) -->
+  <g transform="translate(512 512) scale(0.4) translate(-965 -976)" fill="#ffffff">
+    <circle cx="965" cy="543" r="136"/>
+    <path d="M536 718 C700 756 830 782 965 782 C1100 782 1230 756 1395 718" fill="none" stroke="#ffffff" stroke-width="120" stroke-linecap="round"/>
+    <path d="M831 800 C831 1080 800 1260 738 1420 A67 67 0 0 0 862 1468 C902 1366 930 1280 947 1177 H984 C1001 1280 1029 1366 1069 1468 A67 67 0 0 0 1193 1420 C1131 1260 1100 1080 1100 800 Z"/>
   </g>
   </g>
   <text x="352" y="168" font-family="Lexend, 'Segoe UI', system-ui, sans-serif" font-size="104" font-weight="700" letter-spacing="-3" fill="#0f172a">Accessibility Scanner</text>
