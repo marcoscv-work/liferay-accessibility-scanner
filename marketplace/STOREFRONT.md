@@ -75,10 +75,11 @@ Declare only green rows. Each row is a full run of `scripts/compat-test.sh` on t
 
 | Version | Image | Date | Result | Notes |
 |---|---|---|---|---|
-| 2026.Q3 | `liferay/dxp:2026.q3.6` | 2026-10-12 | **green, 14 of 14** | Page editor, Page Tree, site scan, objects, fragment, CMS, Web Content and Blogs |
-| 2026.Q2 | `liferay/dxp:2026.q2.12` | 2026-10-12 | **green, 13 of 13** | No CMS in this release, so the CMS check does not apply |
+| 2026.Q3 | `liferay/dxp:2026.q3.6` | 2026-10-12 | **green, 14 of 14** | Page editor, Page Tree, site scan, objects, fragment, CMS, Web Content and Blogs; rerun with the single package, no server errors |
+| 2026.Q2 | `liferay/dxp:2026.q2.12` | 2026-10-12 | **green, 13 of 13** | No CMS in this release, so the CMS check does not apply; rerun with the single package, no server errors |
 | 2026.Q1 LTS | `liferay/dxp:2026.q1.9-lts` | 2026-10-12 | not tested | The image's trial license expired in March 2026; needs a development key |
 | 2025.Q4 | `liferay/dxp:2025.q4.12` | 2026-10-12 | not tested | Same expired trial license |
+| 2025.Q1 LTS | `2025.q1.22-hotfix-134` | 2026-10-12 | not tested, source review only | Every DOM hook and Objects field exists in that revision; the Docker image needs a development license key to boot |
 | Master | local source build | 2026-10-12 | green | Development reference |
 
 Declare **2026.Q2 and 2026.Q3** in the wizard. Add 2026.Q1 LTS and 2025.Q4 in a later version once tested with a valid key.
@@ -87,4 +88,4 @@ Fixes the matrix found: quarterly releases require the `x-csrf-token` header on 
 
 ## Open items before submitting
 
-1. Compatibility of the merged package: rerun on 2026.Q2 and 2026.Q3 (see the matrix).
+None. Next step: the wizard, with explicit consent before accepting the Publisher License Agreement and before Submit.
