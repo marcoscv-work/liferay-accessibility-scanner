@@ -677,21 +677,33 @@ ul {
 }
 
 .hero-callout {
-	background: var(--bg-elevated);
-	border: 1px solid var(--border);
-	border-left: 4px solid var(--accent);
-	border-radius: var(--radius);
-	box-shadow: var(--shadow);
-	font-size: 0.9375rem;
+	/* A speech bubble whose tail points into the page in the screenshot, so it
+	   reads as what the scanner says about that page, not as a site stat. The
+	   same fixed colors in light and dark mode: white on #c2410c is 5.2:1. */
+	background: #c2410c;
+	border-radius: var(--radius-lg);
 	bottom: clamp(1rem, 4vw, 2.5rem);
+	color: #ffffff;
+	filter: drop-shadow(0 12px 18px rgba(15, 23, 42, 0.28));
+	font-size: 0.9375rem;
 	left: clamp(-1.5rem, -2vw, -0.5rem);
 	max-width: 17rem;
 	padding: var(--space-3) var(--space-4);
 	position: absolute;
 }
 
+.hero-callout::after {
+	border-bottom: 14px solid #c2410c;
+	border-left: 12px solid transparent;
+	border-right: 12px solid transparent;
+	content: '';
+	left: 72%;
+	position: absolute;
+	top: -13px;
+}
+
 .hero-callout strong {
-	color: var(--fg-strong);
+	color: #ffffff;
 	display: block;
 	font-family: var(--font-heading);
 	font-size: 1.5rem;
