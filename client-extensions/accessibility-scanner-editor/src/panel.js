@@ -1,7 +1,7 @@
 import {t} from './i18n.js';
 import {contextLabel, groupKey} from './liferay-context.js';
 import {MODEL_CHECK_COUNT, runModelScan} from './model.js';
-import {latestScan, probeSiteDarkScheme, runSiteScan} from './site-scan.js';
+import {latestScan, runSiteScan} from './site-scan.js';
 import {ENGINE_VERSION, LIFERAY_RULE_COUNT, runContentScan, runScan} from './runner.js';
 import {PANEL_CSS} from './styles.js';
 
@@ -154,7 +154,7 @@ export class ScannerPanel {
 		this.settings = settings;
 		this.allowPublished = allowPublished;
 		this.allowSite = allowSite;
-		this.source = mode === 'editor' ? 'editor' : mode === 'content' ? 'content' : 'published';
+		this.source = mode === 'editor' ? 'editor' : mode === 'content' ? 'content' : mode === 'site' ? 'site' : 'published';
 		this.reports = {content: null, editor: null, published: null, site: null};
 		this.filter = 'all';
 		this.highlighted = [];
@@ -185,9 +185,13 @@ export class ScannerPanel {
 
 		const tab = (source, active) =>
 			`<li class="nav-item" role="none"><button aria-selected="${active}" class="nav-link ${active ? 'active' : ''} btn btn-unstyled" data-source="${source}" role="tab" type="button">${escapeHtml(t(`source-${source}`))}</button></li>`;
+		// Site scans open from the Page Tree (see page-tree.js), not as a tab.
 		const sources = [];
 		if (this.mode === 'content') {
 			sources.push('content');
+		}
+		else if (this.mode === 'site') {
+			sources.push('site');
 		}
 		else {
 			if (this.mode === 'editor') {
@@ -195,9 +199,6 @@ export class ScannerPanel {
 			}
 			if (this.allowPublished || this.mode !== 'editor') {
 				sources.push('published');
-			}
-			if (this.allowSite) {
-				sources.push('site');
 			}
 		}
 		// A single source needs no tab strip.
@@ -272,6 +273,26 @@ export class ScannerPanel {
 			this.dockToolbarButton();
 			this.hookPublish();
 		}
+		if (this.mode === 'site') {
+			// Opened from the Page Tree button only: no floating toggle.
+			this.host.classList.add('lfr-accessibility-scanner--docked');
+		}
+	}
+
+	/** Opens the drawer on the site view (the Page Tree button calls this). */
+	openSite() {
+		this.siteView = true;
+		this.host.classList.add('lfr-accessibility-scanner--site-view');
+		this.panel.querySelector(`#${this.panelId}-title`).textContent = t('site-title');
+		if (this.source !== 'site') {
+			this.returnSource = this.source;
+			this.setSource('site');
+		}
+		if (this.open) {
+			this.renderSite();
+			return;
+		}
+		this.toggle(true);
 	}
 
 	/**
@@ -475,6 +496,15 @@ export class ScannerPanel {
 
 	toggle(force) {
 		this.open = typeof force === 'boolean' ? force : !this.open;
+		// The editor toggle always opens the page view, even after the site view.
+		if (this.open && !this.siteView && this.source === 'site' && this.mode !== 'site') {
+			this.setSource(this.returnSource || (this.mode === 'content' ? 'content' : this.mode === 'editor' ? 'editor' : 'published'));
+		}
+		if (!this.open && this.siteView) {
+			this.siteView = false;
+			this.host.classList.remove('lfr-accessibility-scanner--site-view');
+			this.panel.querySelector(`#${this.panelId}-title`).textContent = t('title');
+		}
 		this.pushPage(this.open);
 		this.updateTop();
 		this.panel.hidden = !this.open;
@@ -552,16 +582,6 @@ export class ScannerPanel {
 
 	async renderSite() {
 		const groupId = window.Liferay?.ThemeDisplay?.getScopeGroupId?.();
-		if (!this.darkScheme && !this.darkProbe) {
-			this.darkProbe = probeSiteDarkScheme()
-				.catch(() => ({capable: false, evidence: {dataColorScheme: 0, lightDark: 0, prefersColorScheme: 0}, supported: false}))
-				.then((result) => {
-					this.darkScheme = result;
-					if (this.source === 'site' && !this.siteScanning) {
-						this.renderSite();
-					}
-				});
-		}
 		this.live.textContent = '';
 		this.results.innerHTML = `<div class="px-3 pt-3 lfr-accessibility-scanner__site"><p class="text-3 text-secondary">${escapeHtml(t('loading'))}</p></div>`;
 		let scans = [];
@@ -579,26 +599,10 @@ export class ScannerPanel {
 	}
 
 	siteMarkup(latest, previous, progress, result) {
-		const probe = this.darkScheme;
-		const darkSupported = Boolean(probe?.supported);
-		const scheme = darkSupported ? this.siteScheme || 'light' : 'light';
-		let schemeHint = '';
-		if (!probe) {
-			schemeHint = `<p class="mb-2 text-2 text-secondary">${escapeHtml(t('probing-theme'))}</p>`;
-		}
-		else if (!darkSupported) {
-			const key = probe.styleBookOnly ? 'no-dark-scheme-style-book-only' : probe.capable ? 'dark-capable-only' : 'no-dark-scheme';
-			schemeHint = `<p class="mb-2 text-2 text-secondary">${escapeHtml(t(key))}</p>`;
-		}
-		else {
-			const themes = (probe.sources || []).filter((x) => x.kind === 'theme').map((x) => x.name);
-			const where = themes.length ? t('dark-source-theme', themes.join(', ')) : t('dark-source-other', (probe.sources || []).filter((x) => x.kind !== 'style-book').map((x) => x.name).join(', '));
-			schemeHint = `<p class="mb-2 text-2 text-secondary">${escapeHtml(t('dark-scheme-found', where))} ${escapeHtml(t('dark-per-page'))}</p>`;
-		}
-		// No selector when the theme has no dark scheme: there is nothing to pick.
-		const schemeSelect = !darkSupported
-			? schemeHint
-			: `${schemeHint}
+		// A site can mix themes and style books, so the color scheme is always
+		// the author's choice; light and dark by default.
+		const scheme = this.siteScheme || 'both';
+		const schemeSelect = `
 				<div class="form-group form-group-sm mb-2">
 					<label class="text-2" for="${this.panelId}-scheme">${escapeHtml(t('color-scheme'))}</label>
 					<select class="form-control form-control-sm" data-scheme-select id="${this.panelId}-scheme" ${progress ? 'disabled' : ''}>
@@ -629,7 +633,7 @@ export class ScannerPanel {
 					${delta !== null ? `<span class="label ${delta > 0 ? 'label-danger' : delta < 0 ? 'label-success' : 'label-secondary'} ml-auto">${delta > 0 ? '+' : ''}${delta} ${escapeHtml(t('vs-previous'))}</span>` : ''}
 				</div>
 				<p class="mb-3 text-2 text-secondary">${escapeHtml(t('scan-totals', latest.violations ?? 0, latest.pagesScanned ?? 0, latest.needsReview ?? 0))} · ${escapeHtml(latest.trigger || '')} · ${escapeHtml(latest.scanStatus || '')}</p>
-				${result?.lightOnlyPages ? `<p class="mb-3 text-2 text-secondary">${escapeHtml(t('light-only-pages', result.lightOnlyPages))}</p>` : ''}`;
+`;
 		}
 		else {
 			summary = `<p class="mb-3 text-3 text-secondary">${escapeHtml(this.siteError ? t('site-error', this.siteError) : t('no-scans'))}</p>`;
@@ -686,7 +690,8 @@ export class ScannerPanel {
 			this.live.textContent = t('scanning-page', progress.done, progress.total, progress.page || '');
 		};
 		try {
-			const schemes = this.siteScheme === 'both' ? ['light', 'dark'] : [this.siteScheme || 'light'];
+			const scheme = this.siteScheme || 'both';
+			const schemes = scheme === 'both' ? ['light', 'dark'] : [scheme];
 			const result = await runSiteScan({onProgress, schemes, signal: this.siteAbort.signal});
 			this.reports.site = result;
 			const latest = {
@@ -703,6 +708,8 @@ export class ScannerPanel {
 				this.results.innerHTML = this.siteMarkup(latest, previous, null, result);
 			}
 			this.live.textContent = t('scan-totals', result.violations, result.pagesScanned, result.needsReview);
+			// The Page Tree refreshes its score stickers.
+			document.dispatchEvent(new CustomEvent('lfr-accessibility-scanner:site-scanned', {detail: {id: result.id}}));
 		}
 		catch (error) {
 			console.error('[accessibility-scanner]', error);
@@ -1101,7 +1108,7 @@ export class ScannerPanel {
 				break;
 			case 'go-site':
 				event.preventDefault();
-				this.setSource('site');
+				this.openSite();
 				break;
 			case 'cancel-site':
 				this.siteAbort?.abort();

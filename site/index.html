@@ -79,7 +79,7 @@
 			<div class="container">
 				<div class="stat"><strong>axe + 9 rules</strong><span>axe-core 4.14, nine Liferay-aware rules and five content checks</span></div>
 				<div class="stat"><strong>3 scopes</strong><span>Draft in the editor, published page as a visitor, whole site</span></div>
-				<div class="stat"><strong>Light and dark</strong><span>A pass per color scheme when the theme defines one</span></div>
+				<div class="stat"><strong>Light and dark</strong><span>A pass per color scheme, chosen for the whole site</span></div>
 				<div class="stat"><strong>Zero servers</strong><span>Runs in the browser, stores in Objects, ships as one zip</span></div>
 			</div>
 		</section>
@@ -145,7 +145,7 @@
 				<div class="section-head reveal">
 					<p class="eyebrow">Product tour</p>
 					<h2 id="features-title">Built into the place where pages are made</h2>
-					<p>One button next to the viewport switches in the page editor. A drawer the size of the configuration panel. Three tabs: Draft, Published, Site.</p>
+					<p>One button next to the viewport switches in the page editor. A drawer the size of the configuration panel with two tabs, Draft and Published. Site scans live in the Page Tree, where all pages are.</p>
 				</div>
 
 				<article class="feature reveal">
@@ -179,16 +179,16 @@
 
 				<article class="feature reveal" id="site-scans">
 					<div class="feature-copy">
-						<h3>Site tab: the whole site, as an anonymous visitor</h3>
-						<p class="muted">Every public and private page is fetched without credentials and audited in your browser, light and dark when the theme defines a dark scheme. Results go to site-scoped Objects with a score per page, so the next scan shows the delta.</p>
+						<h3>Page Tree: the whole site, as an anonymous visitor</h3>
+						<p class="muted">One button in the Page Tree header scans every page. Each page is fetched without credentials and audited in your browser, in light, dark or both. Results go to site-scoped Objects with a score per page, so the next scan shows the delta, and every page in the tree gets its score next to its name.</p>
 						<ul class="feature-list">
-							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Theme-aware color schemes.</strong> The dark pass only runs on pages whose theme actually defines one.</span></li>
+							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Light and dark passes</strong> for the whole site, because one site can mix themes and style books.</span></li>
 							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Theme and style book recorded per page</strong>, so design issues are attributed to the design.</span></li>
 							<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Progress, cancel and a stale-scan notice</strong> after 14 days without scanning.</span></li>
 						</ul>
 					</div>
 					<div class="shot-panel">
-						<img class="framed" src="assets/shots/framed/panel-site.webp" width="1800" height="2480" alt="The Accessibility drawer on its Site tab: last scan with a score of 47 out of 100, 95 violations on 8 pages, a note that the Liferay USWDS theme defines a dark scheme, a color scheme selector set to light and dark, and a Scan site now button." loading="lazy">
+						<img class="framed" src="assets/shots/framed/panel-site.webp" width="1800" height="2480" alt="The site accessibility drawer, opened from the Page Tree: last scan with a score of 47 out of 100, 95 violations on 8 pages, a color scheme selector set to light and dark, and a Scan site now button." loading="lazy">
 					</div>
 				</article>
 			</div>
@@ -355,7 +355,7 @@
 					</li>
 					<li class="step">
 						<h3>Scan the site, read the report</h3>
-						<p>Run a site scan from the Site tab, then place the Accessibility Report fragment on a page for the team. Rescan whenever you publish.</p>
+						<p>Run a site scan from the Accessibility button in the Page Tree, then place the Accessibility Report fragment on a page for the team. Rescan whenever you publish.</p>
 					</li>
 				</ol>
 				<div class="ships reveal">

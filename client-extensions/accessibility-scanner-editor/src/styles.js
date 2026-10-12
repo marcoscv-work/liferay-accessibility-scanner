@@ -66,6 +66,10 @@ html:not(#__):not(#___) .cadmin .lfr-accessibility-scanner__fab .badge {
 	top: -0.5rem;
 	white-space: nowrap;
 }
+/* Site view (opened from the Page Tree): no page tabs. */
+html:not(#__):not(#___) .cadmin.lfr-accessibility-scanner--site-view [data-sources] {
+	display: none;
+}
 /* Content editors: the page makes room for the open drawer. */
 html.lfr-accessibility-scanner-pushed > body {
 	padding-right: var(--lfr-accessibility-push, 0px) !important;

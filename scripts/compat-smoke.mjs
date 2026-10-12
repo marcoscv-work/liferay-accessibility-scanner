@@ -238,10 +238,10 @@ await check('Published scan', async () => {
 await check('Site scan stored in objects', async () => {
 	const stored = await page.evaluate(async (groupId) => {
 		const panel = window.__lfrAccessibilityScannerPanel;
-		const tab = [...document.querySelectorAll('.lfr-accessibility-scanner .nav-link')].find((a) => /site|sitio/i.test(a.textContent));
-		tab?.click();
+		// Site scans open from the Page Tree button, which calls openSite().
+		panel.openSite();
 		await new Promise((r) => setTimeout(r, 2500));
-		panel.siteScheme = panel.darkScheme?.supported ? 'both' : 'light';
+		panel.siteScheme = 'light';
 		await panel.scanSite();
 		const response = await fetch(`/o/c/accessibilityscans/scopes/${groupId}?sort=startDate:desc&pageSize=1`, {headers: {'Accept': 'application/json', 'Accept-Language': 'en-US', 'x-csrf-token': Liferay.authToken}});
 		const latest = (await response.json()).items?.[0];
@@ -251,6 +251,23 @@ await check('Site scan stored in objects', async () => {
 		throw new Error(`latest scan ${JSON.stringify(stored.latest)} ${stored.error}`);
 	}
 	return `${stored.latest.pages} pages, score ${stored.latest.score}, ${stored.latest.violations} violations`;
+});
+
+await check('Page Tree button and score stickers', async () => {
+	await page.goto(`${base}/web/guest`);
+	await page.waitForLoadState('load');
+	if (!(await page.$('.pages-tree'))) {
+		await page.locator('[data-qa-id="productMenu"]').first().click();
+		await sleep(1500);
+		await page.locator('.lfr-product-menu-panel').getByText('Page Tree', {exact: true}).first().click();
+	}
+	await page.waitForSelector('.lfr-accessibility-scanner__tree-button', {timeout: 30000});
+	await page.waitForSelector('.lfr-accessibility-scanner__tree-score', {timeout: 30000});
+	const stickers = await page.$$eval('.lfr-accessibility-scanner__tree-score', (els) => els.length);
+	await page.click('.lfr-accessibility-scanner__tree-button');
+	await page.waitForSelector('.lfr-accessibility-scanner__panel:not([hidden]) .lfr-accessibility-scanner__site', {timeout: 30000});
+	await page.keyboard.press('Escape');
+	return `${stickers} pages with a score, site view opens`;
 });
 
 await check('Panel torn down outside the editor', async () => {

@@ -33,135 +33,6 @@ async function api(path, {body, method = 'GET'} = {}) {
 	return response.status === 204 ? null : response.json();
 }
 
-/**
- * Whether the SITE theme or style book defines a dark scheme. Only the site's
- * own stylesheets count: the admin theme loaded in the editor uses
- * `light-dark()` everywhere and would be a false positive, so sheets served
- * by the admin theme or the cadmin CSS are skipped. `light-dark()` alone only
- * means the theme is dark-capable; a real dark design shows up as
- * `prefers-color-scheme` media queries or `[data-color-scheme]` selectors.
- */
-export function detectDarkScheme(doc = document) {
-	const evidence = {dataColorScheme: 0, lightDark: 0, prefersColorScheme: 0};
-	const adminSheet = /frontend-css-cadmin-web|\/admin-theme\/|clay_admin|lfr-accessibility-scanner/;
-	// Where the dark rules come from: the theme CSS (`/o/<theme>/css/...`), the
-	// style book tokens the page inlines, or another stylesheet.
-	const sources = new Map();
-	for (const sheet of [...doc.styleSheets].slice(0, 80)) {
-		if (sheet.href && adminSheet.test(sheet.href)) {
-			continue;
-		}
-		if (!sheet.href && sheet.ownerNode?.textContent?.includes('lfr-accessibility-scanner')) {
-			continue;
-		}
-		let rules;
-		try {
-			rules = sheet.cssRules;
-		}
-		catch {
-			continue;
-		}
-		let hits = 0;
-		for (let i = 0; i < Math.min(rules.length, 6000); i++) {
-			const rule = rules[i];
-			if (rule.type === CSSRule.MEDIA_RULE && /prefers-color-scheme\s*:\s*dark/.test(rule.media.mediaText)) {
-				evidence.prefersColorScheme += 1;
-				hits += 1;
-			}
-			else if (rule.type === CSSRule.STYLE_RULE) {
-				// Only dark selectors count: Classic ships `[data-color-scheme=light]`.
-				if (/data-color-scheme\s*=\s*["']?dark/.test(rule.selectorText)) {
-					evidence.dataColorScheme += 1;
-					hits += 1;
-				}
-				if (rule.style.cssText.includes('light-dark(')) {
-					evidence.lightDark += 1;
-				}
-			}
-		}
-		if (hits) {
-			const source = classifySheet(sheet);
-			sources.set(source.key, {...source, hits});
-		}
-	}
-	// Style books have no color scheme variants in the product yet, so dark
-	// rules inlined with the tokens (a variants PoC) do not make a dark scheme
-	// available: only the theme or a real stylesheet does. Revisit when style
-	// book variants ship (LPD-104225): then each variant becomes a pass.
-	const themeSources = [...sources.values()].filter((x) => x.kind !== 'style-book');
-	return {
-		capable: evidence.lightDark > 0,
-		evidence,
-		sources: [...sources.values()],
-		styleBookOnly: themeSources.length === 0 && sources.size > 0,
-		supported: themeSources.length > 0,
-	};
-}
-
-function classifySheet(sheet) {
-	if (sheet.href) {
-		// Theme CSS is served from the theme's context path (…-theme or …-theme-css): /o/<theme>/css/clay.css or main.css.
-		const theme = /\/o\/([^/]*theme[^/]*)\/css\/(?:clay|main)[^/]*$/.exec(sheet.href.split('?')[0]);
-		if (theme) {
-			return {key: `theme:${theme[1]}`, kind: 'theme', name: prettyThemeName(theme[1])};
-		}
-		const file = sheet.href.split('?')[0].split('/').pop();
-		return {key: `sheet:${file}`, kind: 'stylesheet', name: file};
-	}
-	const text = sheet.ownerNode?.textContent || '';
-	// The style book is inlined as `:root { --token: value }` blocks.
-	if (/:root\s*\{[^}]*--/.test(text)) {
-		return {key: 'style-book', kind: 'style-book', name: ''};
-	}
-	return {key: 'inline', kind: 'stylesheet', name: 'inline'};
-}
-
-/**
- * Loads the published page of the site as an anonymous visitor in a hidden
- * frame and inspects its stylesheets, so the verdict is about the site theme
- * and style book, never about the editor.
- */
-export async function probeSiteDarkScheme() {
-	const info = await resolvePageInfo();
-	if (!info.publishedURL) {
-		return {capable: false, evidence: {}, supported: false};
-	}
-	const {html} = await fetchPageHTML(info.publishedURL);
-	const frame = document.createElement('iframe');
-	frame.setAttribute('aria-hidden', 'true');
-	frame.setAttribute('tabindex', '-1');
-	frame.setAttribute('title', 'theme probe');
-	frame.style.cssText = 'position:fixed;left:-20000px;top:0;width:1280px;height:900px;border:0;';
-	// A different frame name keeps the loader from starting the scanner here.
-	frame.name = 'lfr-accessibility-theme-probe';
-	frame.srcdoc = withBase(html, info.publishedURL);
-	document.body.appendChild(frame);
-	try {
-		await new Promise((resolve) => {
-			frame.addEventListener('load', resolve, {once: true});
-			setTimeout(resolve, 15000);
-		});
-		// Stylesheets may still be loading after the document's load event.
-		for (let i = 0; i < 20; i++) {
-			const pending = [...frame.contentDocument.querySelectorAll('link[rel="stylesheet"]')].some((l) => {
-				try {
-					return !l.sheet;
-				}
-				catch {
-					return false;
-				}
-			});
-			if (!pending) {
-				break;
-			}
-			await new Promise((r) => setTimeout(r, 250));
-		}
-		return detectDarkScheme(frame.contentDocument);
-	}
-	finally {
-		frame.remove();
-	}
-}
 
 export function score(findings) {
 	const penalty = findings
@@ -266,8 +137,6 @@ async function auditHTML(html, url, {scheme, timeout = 45000} = {}) {
 		await new Promise((r) => setTimeout(r, 400));
 		const report = await frame.contentWindow.__lfrAccessibilityRunScan();
 		report.title = frame.contentDocument?.title || '';
-		// Whether this page's own theme and style book define a dark scheme.
-		report.darkScheme = detectDarkScheme(frame.contentDocument);
 		report.findings.forEach((f) => {
 			f.element = null;
 			f.context.fragmentElement = null;
@@ -410,10 +279,6 @@ export async function runSiteScan({onProgress = () => {}, schemes = ['light'], s
 	}
 	siteFindings = siteFindings.concat(checkTokenContrast());
 
-	// Pages whose light pass found no dark scheme skip the dark pass: a theme
-	// without one (Classic) renders the same in both and would double-count.
-	const darkSupport = new Map();
-	let lightOnlyPages = 0;
 	let index = 0;
 	for (const {scheme, sitePage} of passes) {
 		if (signal?.aborted) {
@@ -428,20 +293,11 @@ export async function runSiteScan({onProgress = () => {}, schemes = ['light'], s
 		}
 		const sitePath = sitePage.privateLayout ? info.sitePath.replace(/^\/web\//, '/group/') : info.sitePath;
 		const url = `${window.location.origin}${sitePath}${friendly}`;
-		if (scheme === 'dark' && darkSupport.get(friendly) === false) {
-			lightOnlyPages += 1;
-			results.push({friendly, lightOnly: true, title, url});
-			onProgress({done: index, page: title, status: 'skipped', total: passes.length});
-			continue;
-		}
 		onProgress({done: index - 1, page: title, status: 'scanning', total: passes.length});
 		try {
 			const {html, visibility} = await fetchPageHTML(url);
 			const report = await auditHTML(html, url, {scheme});
 			engine = report.engineVersion || engine;
-			if (report.darkScheme) {
-				darkSupport.set(friendly, report.darkScheme.supported);
-			}
 
 			let findings = report.findings;
 			const theme = themeOf(html);
@@ -495,7 +351,7 @@ export async function runSiteScan({onProgress = () => {}, schemes = ['light'], s
 		onProgress({done: index, page: title, status: 'scanned', total: passes.length});
 	}
 
-	const scanned = results.filter((r) => !r.error && !r.lightOnly);
+	const scanned = results.filter((r) => !r.error);
 	const summary = {
 		endDate: new Date().toISOString(),
 		engineVersion: engine ? `axe-core ${engine} + Liferay rules + content checks` : '',
@@ -506,5 +362,5 @@ export async function runSiteScan({onProgress = () => {}, schemes = ['light'], s
 		violations: scanned.reduce((s, r) => s + r.violations, 0),
 	};
 	await api(`/o/c/accessibilityscans/${scan.id}`, {body: summary, method: 'PATCH'});
-	return {id: scan.id, ...summary, lightOnlyPages, results: results.filter((r) => !r.lightOnly), sitePath: info.sitePath, startDate: scan.startDate};
+	return {id: scan.id, ...summary, results, sitePath: info.sitePath, startDate: scan.startDate};
 }

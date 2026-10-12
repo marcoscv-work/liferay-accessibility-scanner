@@ -62,6 +62,23 @@ const SCANNER_FILE = __SCANNER_FILE__;
 	observer.observe(document.documentElement, {childList: true, subtree: true});
 	setTimeout(() => observer.disconnect(), 15000);
 
+	// The Page Tree of the product menu can be opened at any moment by a
+	// signed-in user; load the scanner when it shows up (site scans live there).
+	if (window.Liferay?.ThemeDisplay?.isSignedIn?.()) {
+		if (document.querySelector('.pages-tree')) {
+			load();
+		}
+		else {
+			const treeObserver = new MutationObserver(() => {
+				if (document.querySelector('.pages-tree')) {
+					treeObserver.disconnect();
+					load();
+				}
+			});
+			treeObserver.observe(document.documentElement, {childList: true, subtree: true});
+		}
+	}
+
 	// SennaJS navigation into the editor happens without a page load.
 	if (window.Liferay?.on) {
 		window.Liferay.on('endNavigate', () => setTimeout(check, 0));

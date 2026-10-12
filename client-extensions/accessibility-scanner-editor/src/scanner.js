@@ -1,4 +1,5 @@
 import {detectContentEditor} from './content-editors.js';
+import {PageTreeIntegration} from './page-tree.js';
 import {ScannerPanel} from './panel.js';
 import {runScan} from './runner.js';
 import {canCreateScans, loadSettings} from './settings.js';
@@ -113,6 +114,20 @@ function syncWithNavigation() {
 	}
 }
 
+/**
+ * The panel that hosts the site view: the page's own panel when there is one
+ * (editor, content editor), otherwise a site-only panel created on demand.
+ */
+async function sitePanel() {
+	const current = window.__lfrAccessibilityScannerPanel;
+	if (current && !current.destroyed) {
+		return current;
+	}
+	const settings = await loadSettings(window.Liferay?.ThemeDisplay?.getScopeGroupId?.());
+	window.__lfrAccessibilityScannerPanel = new ScannerPanel(document.body, {allowPublished: false, allowSite: true, mode: 'site', settings});
+	return window.__lfrAccessibilityScannerPanel;
+}
+
 async function start() {
 	if (window.__lfrAccessibilityScanner) {
 		return;
@@ -127,6 +142,11 @@ async function start() {
 	}
 
 	await mountFor(wantsPanel());
+
+	// Site scans: a button and score stickers in the Page Tree of the product menu.
+	if (window.Liferay?.ThemeDisplay?.isSignedIn?.() && !window.__lfrAccessibilityPageTree) {
+		window.__lfrAccessibilityPageTree = new PageTreeIntegration({openSite: async () => (await sitePanel()).openSite()});
+	}
 
 	if (window.Liferay?.on) {
 		window.Liferay.on('endNavigate', () => setTimeout(syncWithNavigation, 0));

@@ -82,19 +82,23 @@ if (await sidebarClose.count()) {
 	await sidebarClose.click().catch(() => {});
 	await sleep(800);
 }
-await openPanel('Site');
+// Scan the site first so the editor tabs do not show the "never scanned" notice.
+await openPanel();
+await page.evaluate(() => window.__lfrAccessibilityScannerPanel.openSite());
 await sleep(3000);
-// Scan the site first so the other tabs do not show the "never scanned" notice.
 const hasScan = await page.evaluate(() => !/not been scanned|no se ha escaneado/i.test(document.querySelector('.lfr-accessibility-scanner__site')?.innerText || ''));
 if (!hasScan || process.env.SHOT_RESCAN) {
 	console.log('running a site scan on', site);
 	await page.evaluate(async () => {
 		const panel = window.__lfrAccessibilityScannerPanel;
-		panel.siteScheme = panel.darkScheme?.supported ? 'both' : 'light';
+		panel.siteScheme = 'both';
 		await panel.scanSite();
 	});
 	await sleep(2000);
 }
+// Close the site view; the editor toggle reopens the page view.
+await page.evaluate(() => window.__lfrAccessibilityScannerPanel.toggle(false));
+await sleep(500);
 await openPanel('Draft');
 await page.evaluate(() => window.__lfrAccessibilityScannerPanel.scan());
 await sleep(4000);
@@ -106,8 +110,18 @@ await page.evaluate(() => window.__lfrAccessibilityScannerPanel.scanPublished())
 await sleep(15000);
 await shotPanel('editor-published');
 
-// 3. Site tab with the latest scan (run before the other tabs, see above).
-await openPanel('Site');
+// 3. Site view from the Page Tree of the published page, with score stickers.
+await page.goto(`${base}/web/${site}/${editPage}`);
+await page.waitForLoadState('load');
+await sleep(1500);
+if (!(await page.$('.pages-tree'))) {
+	await page.locator('[data-qa-id="productMenu"]').first().click();
+	await sleep(1500);
+	await page.locator('.lfr-product-menu-panel').getByText('Page Tree', {exact: true}).first().click();
+}
+await page.waitForSelector('.lfr-accessibility-scanner__tree-score', {timeout: 30000});
+await page.click('.lfr-accessibility-scanner__tree-button');
+await page.waitForSelector('.lfr-accessibility-scanner__panel:not([hidden]) .lfr-accessibility-scanner__site');
 await sleep(3000);
 await shotPanel('editor-site');
 
