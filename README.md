@@ -2,6 +2,8 @@
 
 WCAG analyzer that runs inside Liferay DXP. It combines [axe-core](https://github.com/dequelabs/axe-core) with rules that understand how Liferay pages are built (fragments, editables, widgets, style books, content), so every finding points at the thing an author has to change, not at a CSS selector.
 
+Product site: https://marcoscv-work.github.io/liferay-accessibility-scanner/
+
 Everything ships as client extensions and is meant to be published on the Liferay Marketplace.
 
 ## Client Extensions
@@ -96,7 +98,7 @@ The editor DOM is not what visitors get: the editor adds classes, `tabindex` and
 
 ## Product site
 
-`site/` is the static product website (plain HTML, CSS and a few lines of JavaScript; Lexend and Source Sans 3 from Google Fonts). Design direction from the UI/UX Pro Max skill: Hero + Features + CTA pattern, Minimalism and Swiss style, light mode, orange accent. The screenshots under `site/assets/shots` are real product captures taken with `scripts/storefront-shots.mjs` against the local bundle (1920x1080 at 2x, element shots with margins, WebP next to each PNG); they double as Marketplace storefront images. `scripts/propagate-fragment.mjs` propagates a re-imported fragment to the pages using it (what the Fragments admin does from Usages, driven with Playwright). Both scripts need `NODE_PATH` pointing at a `node_modules` with Playwright.
+`site/` is the static product website, deployed to GitHub Pages by `.github/workflows/pages.yml` on every push to `master` that touches it (plain HTML, CSS and a few lines of JavaScript; Lexend and Source Sans 3 from Google Fonts). Design direction from the UI/UX Pro Max skill: Hero + Features + CTA pattern, Minimalism and Swiss style, light mode, orange accent. The screenshots under `site/assets/shots` are real product captures taken with `scripts/storefront-shots.mjs` against the local bundle (1920x1080 at 2x, element shots with margins, WebP next to each PNG); they double as Marketplace storefront images. `scripts/propagate-fragment.mjs` propagates a re-imported fragment to the pages using it (what the Fragments admin does from Usages, driven with Playwright). Both scripts need `NODE_PATH` pointing at a `node_modules` with Playwright.
 
 ## Roadmap
 
