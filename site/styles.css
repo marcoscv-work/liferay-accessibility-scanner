@@ -1360,3 +1360,9 @@ ul {
 	text-decoration: underline;
 	text-underline-offset: 3px;
 }
+
+/* The header button keeps its label on one line. */
+
+.site-header .header-cta {
+	white-space: nowrap;
+}

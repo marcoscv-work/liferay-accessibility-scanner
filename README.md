@@ -4,11 +4,13 @@ WCAG analyzer that runs inside Liferay DXP. It combines [axe-core](https://githu
 
 Product site: https://marcoscv-work.github.io/liferay-accessibility-scanner/
 
-Everything ships as client extensions and is meant to be published on the Liferay Marketplace.
+Available on the Liferay Marketplace: https://marketplace.liferay.com/p/accessibility-scanner-for-liferay
+
+Everything ships as client extensions.
 
 ## Install
 
-Deploy `accessibility-scanner.zip` like any client extension. The [install guide](https://marcoscv-work.github.io/liferay-accessibility-scanner/install.html) covers the report fragment, per-site settings, upgrades and uninstalling.
+Get it from the [Marketplace](https://marketplace.liferay.com/p/accessibility-scanner-for-liferay), or deploy `accessibility-scanner.zip` like any client extension. The [install guide](https://marcoscv-work.github.io/liferay-accessibility-scanner/install.html) covers the report fragment, per-site settings, upgrades and uninstalling.
 
 ## Client Extensions
 
